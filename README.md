@@ -11,7 +11,7 @@ Hardware use: Intel RealSense d435i\
 \
 What works so far is a skeleton setup before any prossecing.\
 Depth, IR and RGB are displayed, the IMU data is printed to the console.\
-
+\
 
                   
                   
