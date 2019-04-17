@@ -1,6 +1,6 @@
 # SIR
 Sewer fault detection P4 project\
-A projct for detecting faults within the sewer.\
+A projct for detecting faults within the sewer.
 
 
 ## Hardware: 
