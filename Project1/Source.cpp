@@ -31,11 +31,10 @@ int main()
 	// What to stream, ratio of image, format i.e 8bit / 16bit and the framerate
 	
 	
-	
-	cfg.enable_stream(RS2_STREAM_INFRARED, 640, 480, RS2_FORMAT_Y8, 30);
-	cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
 	cfg.enable_stream(RS2_STREAM_GYRO);
 	cfg.enable_stream(RS2_STREAM_ACCEL);
+	cfg.enable_stream(RS2_STREAM_INFRARED, 640, 480, RS2_FORMAT_Y8, 30);
+	cfg.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
 	cfg.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
 	
 	//Instruct pipeline to start streaming with the requested configuration
@@ -59,19 +58,11 @@ int main()
 		rs2::frame RGB = data.get_color_frame();
 		
 		// Find and retrieve IMU 
-		if (rs2::motion_frame accel_frame = data.first_or_default(RS2_STREAM_ACCEL))
-		{
-			rs2_vector accel_sample = accel_frame.get_motion_data();
-			cout << "Accel:" << accel_sample.x << ", " << accel_sample.y << ", " << accel_sample.z << std::endl;
+		rs2::motion_frame accel_frame = data.first_or_default(RS2_STREAM_ACCEL);
+		rs2::motion_frame gyro_frame = data.first_or_default(RS2_STREAM_GYRO);
+		rs2_vector accel_sample = accel_frame.get_motion_data();
+		rs2_vector gyro_sample = gyro_frame.get_motion_data();
 			
-		}
-
-		if (rs2::motion_frame gyro_frame = data.first_or_default(RS2_STREAM_GYRO))
-		{
-			rs2_vector gyro_sample = gyro_frame.get_motion_data();
-			cout << "Gyro:" << gyro_sample.x << ", " << gyro_sample.y << ", " << gyro_sample.z << std::endl;
-			
-		}
 
 		
 		// Query frame size (width and height)
