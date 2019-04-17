@@ -8,7 +8,7 @@ Intel RealSense d435i
 
 ## Software needed: 
 Intel RealSence SDK\
-A cpp comipler as visual studio
+A cpp compiler as visual studio
 
 
 ## Work done
