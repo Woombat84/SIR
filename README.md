@@ -1,17 +1,18 @@
 # SIR
-Sewer fault detection P4 project
-A projct for detecting faults within the sewer.
-
-
-
-Hardware use: Intel RealSense d435i
-
-
-What works so far is a skeleton setup before any prossecing.
-Depth, IR and RGB are displayed, the IMU data is printed to the console.
-
-Software needed : Intel RealSence SDK
+Sewer fault detection P4 project\
+A projct for detecting faults within the sewer.\
+\
+\
+Hardware use: Intel RealSense d435i\
+\
+\Software needed : Intel RealSence SDK
                   A cpp comipler as visual studio
+\
+\
+What works so far is a skeleton setup before any prossecing.\
+Depth, IR and RGB are displayed, the IMU data is printed to the console.\
+
+
                   
                   
                   
