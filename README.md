@@ -31,6 +31,7 @@ If you get and error regarding a path do the following:
 ![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/predelete.png "note: their maybe a more path's with in this structur")
 4. Delete everhting between </ImportGroup> EXCEPT the two top lines.
 5. Save.
+
 ⋅⋅⋅The end result should look like this:
 
 ![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/deleted.png "End result")
