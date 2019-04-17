@@ -1,34 +1,45 @@
 # SIR
+Sewer Inspection Robot.\
 Sewer fault detection P4 project\
-A projct for detecting faults within the sewer.\
-\
-\
-Hardware use: Intel RealSense d435i\
-\
-\Software needed : Intel RealSence SDK
-                  A cpp comipler as visual studio
-\
-\
-What works so far is a skeleton setup before any prossecing.\
-Depth, IR and RGB are displayed, the IMU data is printed to the console.\
-\
+A projct for detecting faults within the sewer.
 
-                  
-                  
-                  
-A note : If you get and error regarding a path do the following 
-         1.find Project1.vcxproj
-         2.open with notepad or any plain text editor
-         3.locate this  </ImportGroup>
-                        <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-                        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-                        <Import Project="intel.realsense.props" />
-                        <Import Project="opencv.props" />
-                        </ImportGroup>
-                        note: their maybe a morre path's with in this structur
-         4.delete everhting between </ImportGroup> EXCEPT the two top lines
-         5.save    the end result should look like this:
-                        </ImportGroup>
-                        <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-                        <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-                        </ImportGroup>
+
+## Hardware: 
+Intel RealSense d435i\
+USB 3.0
+
+## Software needed: 
+Intel RealSence SDK\
+A cpp compiler as visual studio
+
+
+## Work done:
+What works so far is a skeleton setup before any prossecing.\
+Depth, IR and RGB are displayed, the IMU data is printed to the console.
+
+![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/view.png "Working part")
+
+## What needs to be done:
+Deteced faults.\
+Make complimentray filter for IMU data.
+
+
+## Know errors:
+If you get and error regarding a path, do the following: 
+1. Find Project1.vcxproj
+
+2. Open with notepad or any plain text editor.
+
+3. Locate this:
+
+![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/predelete.png "note: their maybe a more path's with in this structur")
+
+4. Delete everhting between </ImportGroup> EXCEPT the two top lines.
+
+5. Save.
+
+⋅⋅⋅The end result should look like this:
+
+![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/deleted.png "End result")
+
+6. Add property sheets in visual studio for openCV and intel.realsense both can be located in the RealSense SDK libaery.  
