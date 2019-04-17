@@ -25,7 +25,7 @@ Make complimentray filter for IMU data.
 
 
 ## Know errors:
-If you get and error regarding a path do the following: 
+If you get and error regarding a path, do the following: 
 1. Find Project1.vcxproj
 
 2. Open with notepad or any plain text editor.
