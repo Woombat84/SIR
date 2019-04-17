@@ -14,7 +14,7 @@ A cpp compiler as visual studio
 
 ## Work done:
 What works so far is a skeleton setup before any prossecing.\
-Depth, IR and RGB are displayed, the IMU data is printed to the console.\
+Depth, IR and RGB are displayed, the IMU data is printed to the console.
 
 ![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/view.png "Working part")
 
