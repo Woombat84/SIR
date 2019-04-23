@@ -6,7 +6,7 @@ A projct for detecting faults within the sewer.
 
 ## Hardware: 
 Intel RealSense d435i\
-A computer with at least a USB 3.0 port or above.\
+A computer with at least a USB 3.0 port or above.
 
 ## Software needed: 
 Intel RealSence SDK\
