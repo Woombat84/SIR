@@ -21,9 +21,27 @@
     <ClCompile Include="prossecing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IMUData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Knn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prossecing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IMUData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Knn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

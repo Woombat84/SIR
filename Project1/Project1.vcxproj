@@ -126,10 +126,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Features.cpp" />
+    <ClCompile Include="IMUData.cpp" />
+    <ClCompile Include="Knn.cpp" />
     <ClCompile Include="prossecing.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Features.h" />
+    <ClInclude Include="IMUData.h" />
+    <ClInclude Include="Knn.h" />
     <ClInclude Include="prossecing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
