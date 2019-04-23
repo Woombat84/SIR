@@ -130,7 +130,7 @@
     <ClCompile Include="IMUData.cpp" />
     <ClCompile Include="Knn.cpp" />
     <ClCompile Include="prossecing.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Features.h" />
