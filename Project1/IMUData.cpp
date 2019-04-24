@@ -17,7 +17,7 @@
 #include "IMUData.h"
 #include <math.h>
 #include <chrono>
-#include<stdlib.h>
+
 /*
 % Function : Constructor
 %
@@ -152,3 +152,36 @@ void IMUData::XZdeg(float& X, float& Z)
 	xzDeg = sin(abs(Z) / sqrtf(X * X + Z * Z));
 }
 
+/*
+% Function : High pass Filtering .
+%
+% Description : This function returns a high-pass filtered signal.
+%
+%
+% Parameters : A deg that needs filtering.
+%
+% Return : A filterede float.
+%
+*/
+float IMUData::highPass(float deg)
+{
+
+}
+
+
+/*
+% Function : Low pass Filtering .
+%
+% Description : This function returns a low-pass filtered signal.
+%
+%
+% Parameters : A deg that needs low-pass filtering.
+%
+% Return : A filterede float.
+%
+*/
+float IMUData::lowPass(float deg)
+{
+
+
+}
