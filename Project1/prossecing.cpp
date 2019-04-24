@@ -92,8 +92,22 @@ void prossecing::drawImage(cv::Mat &img)
 
 }
 
-void prossecing::threshold(void *asf){
 
+void prossecing::greyscale(cv::Mat &img) {
 
+	cv::Mat newImg = cv::Mat(img.rows, img.cols, CV_8UC1);
+
+	for (int x = 0; x < img.cols; x++) {//sætter x og y værdierne
+		for (int y = 0; y < img.rows; y++) {
+			 newImg.at<uchar>(y, x) = wr * img.at<cv::Vec3b>(y, x)[0] + wg * img.at<cv::Vec3b>(y, x)[0] + wb * img.at<cv::Vec3b>(y, x)[0];//weight
+			
+		}
+	}
 
 }
+
+void prossecing::threshold(cv::Mat& img)
+{
+}
+
+
