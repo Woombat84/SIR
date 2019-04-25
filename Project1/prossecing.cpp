@@ -193,28 +193,29 @@ void prossecing::blobRecursiv(cv::Mat &blob,int x,int y) {
 	
 	
 	
-	// Using the cross mention in the grassfire algo
-	//first burning the pixel that the cross lands on
+	//Using the cross mention in the grassfire algo
+	//First burning the pixel that the cross lands on
 	
 	blob.at<uchar>(y , x) = 0;
 
-	//storing the point in a a vector.
+	//Storing the point in a a vector.
 
 	blob_vector.push_back(cv::Point{ x, y });
 
-	//looking at the arms in this order: left,up, right, down.
+	//Looking at the arms in this order: left,up, right, down.
+	//Looking left 
 	if (blob.at<uchar>(y, x+1) == BitValue) {
 		blobRecursiv(blob, x + 1, y);
 	}
-
+	//Looking up
 	if (blob.at<uchar>(y-1, x) == BitValue) {
 		blobRecursiv(blob, x , y -1);
 	}
-
+	//Looking right
 	if (blob.at<uchar>(y, x-1) == BitValue) {
 		blobRecursiv(blob, x - 1, y);
 	}
-		
+	//Looking down	
 	if (blob.at<uchar>(y-1, x) == BitValue) {
 		blobRecursiv(blob, x , y + 1);
 
