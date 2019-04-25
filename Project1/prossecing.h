@@ -1,4 +1,8 @@
 #pragma once
+#include <opencv2\core.hpp>
+#include <opencv2\highgui.hpp>
+#include <opencv2\imgproc.hpp>
+#include <iostream>
 
 
 class prossecing
@@ -13,6 +17,10 @@ public:  //Methodes
 	void drawImage(cv::Mat& img);
 	void greyscale(cv::Mat& img);
 	void threshold(cv::Mat& img);
+
+	std::vector<std::vector<cv::Point>> blob(cv::Mat& img);
+
+	void blobRecursiv(cv::Mat& blob, int x, int y);
 	
 
 private: //Methodes
@@ -28,8 +36,10 @@ private: //members
 	double wr = 0.3;
 	double wb = 0.3;
 	double wg = 0.3;
+	int BitValue = 255;
 	std::vector<cv::Point>	my_vector;
 	std::vector<std::vector<cv::Point>>  my_contours;
-	
+	std::vector<cv::Point> blob_vector;
+	std::vector<std::vector<cv::Point>> Blobs_detected;
 };
 

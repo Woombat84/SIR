@@ -1,3 +1,15 @@
+/*
+%
+% This Header Cpp files Prossecing is used to prossecing the image from the 
+% Intel RealSense d435i.
+%
+% Author1: 19gr466
+%
+% Date : Spring 2019
+% Course : Rob4 Computervision
+%
+*/
+
 #pragma once
 #include <opencv2\core.hpp>
 #include <opencv2\highgui.hpp>
@@ -106,8 +118,88 @@ void prossecing::greyscale(cv::Mat &img) {
 
 }
 
-void prossecing::threshold(cv::Mat& img)
+void prossecing::threshold(cv::Mat &img)
 {
 }
 
 
+/*
+% Function : Gather all blobs .
+%
+% Description : This function runs thrugh the image until it findes a undeteted blob.
+%				A helper function to run thruohg each blob is created called blobRecursiv.
+%
+%
+% Parameters : An image.
+%
+% Return : A vector of vectors of points.
+%
+*/
+std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat &img)
+{
+ cv::Mat blob = cv::Mat(img.rows, img.cols, CV_8UC1);
+ 
+	for (int x = 0; x < blob.cols; x++) {
+		for (int y = 0; y < blob.rows; y++) {
+			if (!blob.at<uchar>(y, x) == BitValue) {}
+			else {
+				
+				blobRecursiv(blob, x, y);
+	
+			}
+			Blobs_detected.push_back(blob_vector);
+			blob_vector.clear();
+		}
+	}
+	return Blobs_detected;
+}
+
+
+/*
+% Function : Recursive storing of points in a blob .
+%
+% Description : This function is deteting all pixels in a blob and stor them 
+%				in a vetor.
+%
+% Parameters : An image, x and y coordinates.
+%
+% Return : nonthing.
+%
+*/
+void prossecing::blobRecursiv(cv::Mat &blob,int x,int y) {
+	
+	
+	
+	// Using the cross mention in the grassfire algo
+	//first burning the pixel that the cross lands on
+	
+	blob.at<uchar>(y , x) = 0;
+
+	//storing the point in a a vector.
+
+	blob_vector.push_back(cv::Point{ x, y });
+
+	//looking at the arms in this order: left,up, right, down.
+	if (blob.at<uchar>(y, x+1) == BitValue) {
+		blobRecursiv(blob, x + 1, y);
+	}
+
+	if (blob.at<uchar>(y-1, x) == BitValue) {
+		blobRecursiv(blob, x , y -1);
+	}
+
+	if (blob.at<uchar>(y, x-1) == BitValue) {
+		blobRecursiv(blob, x - 1, y);
+	}
+		
+	if (blob.at<uchar>(y-1, x) == BitValue) {
+		blobRecursiv(blob, x , y + 1);
+
+	}
+	
+	else
+	
+		
+		return;
+		
+}

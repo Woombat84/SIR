@@ -15,6 +15,10 @@ private: // methodes
 	void YZdeg(float& Y, float& Z);
 	void XZdeg(float& X, float& Z);
 
+	float highPass(float deg);
+
+	float lowPass(float deg);
+
 
 public:  // members
 
