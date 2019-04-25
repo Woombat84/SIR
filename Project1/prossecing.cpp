@@ -220,9 +220,9 @@ void prossecing::blobRecursiv(cv::Mat &blob,int x,int y) {
 
 	}
 	
-	else
+	else { return; }
 	
 		
-		return;
+		
 		
 }
