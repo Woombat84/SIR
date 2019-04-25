@@ -117,7 +117,17 @@ void prossecing::greyscale(cv::Mat &img) {
 	}
 
 }
-
+/*
+% Function : Greyscale to binary.
+%
+% Description : This function converts a greyscale image to a binary image(B/W)
+%				
+%
+% Parameters : An image and a threshold.
+%
+% Return : Binary Mat.
+%
+*/
 cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 {
 	cv::Mat New = cv::Mat(Old.cols, Old.rows, CV_8UC1);
