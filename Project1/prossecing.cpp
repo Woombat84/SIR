@@ -118,8 +118,21 @@ void prossecing::greyscale(cv::Mat &img) {
 
 }
 
-void prossecing::threshold(cv::Mat &img)
+cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 {
+	cv::Mat New = cv::Mat(Old.cols, Old.rows, CV_8UC1);
+	for (int x = 0; x < Old.cols; x++) {
+		for (int y = 0; y < Old.rows; y++) {
+			if (Old.at <int8_t>(y, x) > binaryThreshold) {
+				New.at<int8_t>(y, x) = 0;
+			}
+			else {
+				New.at<int8_t>(y, x) = 255;
+			}
+		}
+	}
+	return New;
+
 }
 
 
