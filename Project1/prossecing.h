@@ -23,7 +23,7 @@ public:  //Methodes
 
 
 	//draws the conours
-	void drawImage(cv::Mat img, vector<vector<Point>> myContours);
+	void drawImage(Mat img, vector<vector<Point>> myContours);
 	void greyscale(cv::Mat& img);
 	void threshold(cv::Mat& img); 
 	Mat rob_bluring(Mat img, int k);

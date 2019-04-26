@@ -137,6 +137,7 @@ Mat prossecing::rob_bluring(Mat img, int k)
 Mat prossecing::rob_dilation(Mat img, int k) {
 
 	Mat img2 = img;
+	int d = 0;
 
 	for (int i = k / 2; i < img.rows - (k / 2); i++)
 		for (int j = k / 2; j < img.cols - (k / 2); j++)
