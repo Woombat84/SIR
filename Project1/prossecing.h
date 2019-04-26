@@ -15,7 +15,7 @@ public:  //Methodes
 	void rob_findCountor(cv::Mat& img, cv::Point myPoint, int tresholdValue);
 	void rob_findContours(cv::Mat& img, int treshold);
 	void drawImage(cv::Mat& img);
-	void greyscale(cv::Mat& img);
+	cv::Mat greyscale(cv::Mat& img);
 	cv::Mat threshold(cv::Mat& Old, int binaryThreshold);
 	
 
@@ -35,9 +35,9 @@ private: //members
 	int dif = 1;
 	int threshThreshold = 60;
 	double wr = 0.3;
-	double wb = 0.3;
+	double wb = 0.4;
 	double wg = 0.3;
-	int BitValue = 255;
+	int8_t BitValue = 0;
 	std::vector<cv::Point>	my_vector;
 	std::vector<std::vector<cv::Point>>  my_contours;
 	std::vector<cv::Point> blob_vector;

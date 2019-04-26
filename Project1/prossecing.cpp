@@ -105,16 +105,17 @@ void prossecing::drawImage(cv::Mat &img)
 }
 
 
-void prossecing::greyscale(cv::Mat &img) {
-
-	cv::Mat newImg = cv::Mat(img.rows, img.cols, CV_8UC1);
-
-	for (int x = 0; x < img.cols; x++) {//sætter x og y værdierne
-		for (int y = 0; y < img.rows; y++) {
-			 newImg.at<uchar>(y, x) = wr * img.at<cv::Vec3b>(y, x)[0] + wg * img.at<cv::Vec3b>(y, x)[0] + wb * img.at<cv::Vec3b>(y, x)[0];//weight
+cv::Mat prossecing::greyscale(cv::Mat &img) {
+	
+	cv::Mat newImg = cv::Mat(img.rows,img.cols, CV_8UC1);
+	for (int y = 0; y <= img.rows-1; y++) {//sætter x og y værdierne
+		for (int x = 0; x <= img.cols-1; x++) {
+			
+			 newImg.at<uchar>(y, x) = wr * img.at<cv::Vec3b>(y, x)[0] + wg * img.at<cv::Vec3b>(y, x)[1] + wb * img.at<cv::Vec3b>(y, x)[2];//weight
 			
 		}
 	}
+	return newImg;
 
 }
 /*
@@ -130,19 +131,18 @@ void prossecing::greyscale(cv::Mat &img) {
 */
 cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 {
-	cv::Mat New = cv::Mat(Old.cols, Old.rows, CV_8UC1);
-	for (int x = 0; x < Old.cols; x++) {
-		for (int y = 0; y < Old.rows; y++) {
-			if (Old.at <int8_t>(y, x) > binaryThreshold) {
-				New.at<int8_t>(y, x) = 0;
+	cv::Mat New = cv::Mat(Old.rows, Old.cols, CV_8UC1);
+	for (int y = 0; y < Old.rows; y++) {
+		for (int x = 0; x < Old.cols; x++) {
+			if (Old.at <int8_t>(y, x) > 10) {
+				New.at<int8_t>(y, x) = 255;
 			}
 			else {
-				New.at<int8_t>(y, x) = 255;
+				New.at<int8_t>(y, x) = 0;
 			}
 		}
 	}
 	return New;
-
 }
 
 
@@ -161,12 +161,13 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat &img)
 {
  cv::Mat blob = cv::Mat(img.rows, img.cols, CV_8UC1);
- 
-	for (int x = 0; x < blob.cols; x++) {
-		for (int y = 0; y < blob.rows; y++) {
-			if (!blob.at<uchar>(y, x) == BitValue) {}
+ blob = img;
+	for (int y = 0; y < blob.rows; y++) {
+		for (int x = 0; x < blob.cols; x++) {
+			if (blob.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
 			else {
-				
+				//int8_t dd = blob.at<int8_t>(y, x);
+				//std::cout << x <<","<< y << std::endl;
 				blobRecursiv(blob, x, y);
 	
 			}
@@ -189,41 +190,44 @@ std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat &img)
 % Return : nonthing.
 %
 */
-void prossecing::blobRecursiv(cv::Mat &blob,int x,int y) {
-	
-	
+void prossecing::blobRecursiv(cv::Mat& blob, int x, int y) {
 	
 	//Using the cross mention in the grassfire algo
 	//First burning the pixel that the cross lands on
-	
-	blob.at<uchar>(y , x) = 0;
+
+	blob.at<uchar>(y, x) = 0;
 
 	//Storing the point in a a vector.
-
+	bool b = false;
 	blob_vector.push_back(cv::Point{ x, y });
+	while (b == false){
+		//Looking at the arms in this order: left,up, right, down.
+		//Looking left 
+		if (blob.at<uchar>(y, x + 1) > BitValue) {
+			std::cout << "Looking left: " << x + 1 << " , " << y << std::endl;
+			blobRecursiv(blob, x + 1, y);
+		}
+		//Looking up
+		if (blob.at<uchar>(y - 1, x)> BitValue) {
+			std::cout << "Looking up: " << x << " , " << y - 1 << std::endl;
+			blobRecursiv(blob, x, y - 1);
+		}
+		//Looking right
+		if (blob.at<uchar>(y, x - 1) > BitValue) {
+			std::cout << "Looking right" << x - 1 << " , " << y << std::endl;
+			blobRecursiv(blob, x - 1, y);
+		}
+		//Looking down	
+		if (blob.at<uchar>(y + 1, x) > BitValue) {
+			std::cout << "Looking down: " << x << " , " << y + 1 << std::endl;
+			blobRecursiv(blob, x, y + 1);
 
-	//Looking at the arms in this order: left,up, right, down.
-	//Looking left 
-	if (blob.at<uchar>(y, x+1) == BitValue) {
-		blobRecursiv(blob, x + 1, y);
-	}
-	//Looking up
-	if (blob.at<uchar>(y-1, x) == BitValue) {
-		blobRecursiv(blob, x , y -1);
-	}
-	//Looking right
-	if (blob.at<uchar>(y, x-1) == BitValue) {
-		blobRecursiv(blob, x - 1, y);
-	}
-	//Looking down	
-	if (blob.at<uchar>(y-1, x) == BitValue) {
-		blobRecursiv(blob, x , y + 1);
+		}
 
+		else{
+		std::cout << "done: " << x << " , " << y << std::endl;
+		b = true;
+		}
 	}
-	
-	else { return; }
-	
-		
-		
-		
+	return; 		
 }
