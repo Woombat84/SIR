@@ -17,7 +17,8 @@ prossecing::~prossecing()
 }
 
 
-
+//this template is a template for + operation for vectors
+// <T> means every type 
 template <typename T>
 std::vector<T>operator+(const std::vector<T> &A, const std::vector<T> &B)
 {
@@ -28,6 +29,8 @@ std::vector<T>operator+(const std::vector<T> &A, const std::vector<T> &B)
 	return AB;
 }
 
+
+
 int prossecing::isIn(cv::Point myPoint)
 {
 	for (int i = 0; i < my_contours.size(); i++)
@@ -36,7 +39,7 @@ int prossecing::isIn(cv::Point myPoint)
 	return 0;
 }
 
-void prossecing::rob_findContours(cv::Mat &img, int treshold)
+vector<vector<Point>> prossecing::rob_findContours(cv::Mat img, int treshold)
 
 {
 	//	img = contrast(img, 1);
@@ -52,15 +55,16 @@ void prossecing::rob_findContours(cv::Mat &img, int treshold)
 				my_vector.clear();
 			}
 
+	return my_contours;
 }
 
 
 
-void prossecing::rob_findCountor(cv::Mat &img, cv::Point myPoint,int tresholdValue)
+void prossecing::rob_findCountor(cv::Mat img, cv::Point myPoint,int tresholdValue)
 
 {
 	//	Point newPoint;
-	
+	int dif = 1;
 	my_vector.push_back(myPoint);
 	if ((myPoint.x >= dif || myPoint.x < img.cols - dif) && (myPoint.y >= dif || myPoint.y < img.rows - dif))
 	{
@@ -76,16 +80,16 @@ void prossecing::rob_findCountor(cv::Mat &img, cv::Point myPoint,int tresholdVal
 }
 
 
-void prossecing::drawImage(cv::Mat &img)
+void prossecing::drawImage(cv::Mat img, vector<vector<Point>> myContours)
 {
 	for (int i = 0; i < img.rows; i++)
 		for (int j = 0; j < img.cols; j++)
 			img.at<cv::Vec3b>(i, j) = cv::Vec3b{ 255,255,255 };
 
-	int s = my_contours.size();
+	int s = myContours.size();
 	for (int i = 0; i < s; i++)
-		for (int j = 0; j < my_contours[i].size(); j++)
-			img.at<cv::Vec3b>(my_contours[i][j]) = cv::Vec3b{ 0,0,255 };
+		for (int j = 0; j < myContours[i].size(); j++)
+			img.at<cv::Vec3b>(myContours[i][j]) = cv::Vec3b{ 0,0,255 };
 
 
 	imshow("bound", img);
@@ -108,6 +112,76 @@ void prossecing::greyscale(cv::Mat &img) {
 
 void prossecing::threshold(cv::Mat& img)
 {
+}
+
+Mat prossecing::rob_bluring(Mat img, int k)
+{
+	Mat img2 = img;
+
+	for (int i = k / 2; i < img.rows - (k / 2); i++)
+		for (int j = k / 2; j < img.cols - (k / 2); j++)
+		{
+			int s = 0;
+			for (int ii = -k / 2; ii <= k / 2; ii++)
+				for (int jj = -k / 2; jj <= k / 2; jj++)
+					s += img.at<uchar>(i + ii, j + jj);
+			int c = round(s / (k * k));
+			img2.at<uchar>(i, j) = c;
+
+		}
+
+	return img2;
+
+}
+
+Mat prossecing::rob_dilation(Mat img, int k) {
+
+	Mat img2 = img;
+
+	for (int i = k / 2; i < img.rows - (k / 2); i++)
+		for (int j = k / 2; j < img.cols - (k / 2); j++)
+		{
+			int t = 0;
+			for (int ii = -k / 2; ii <= k / 2; ii++) {
+				for (int jj = -k / 2; jj <= k / 2; jj++)
+					if (img.at<uchar>(i + ii, j + jj) == 0) {
+						t = 1;
+						break;
+					}
+				if (t == 1)
+					break;
+			}
+
+			img2.at<uchar>(i, j) = t == 1 ? 0 : 255;
+
+		}
+	return img2;
+
+}
+
+Mat prossecing::rob_erosion(Mat img, int k) {
+
+	Mat img2 = img;
+
+	for (int i = k / 2; i < img.rows - (k / 2); i++)
+		for (int j = k / 2; j < img.cols - (k / 2); j++)
+		{
+			int t = 0;
+			for (int ii = -k / 2; ii <= k / 2; ii++) {
+				for (int jj = -k / 2; jj <= k / 2; jj++)
+					if (img.at<uchar>(i + ii, j + jj) == 255) {
+						t = 1;
+						break;
+					}
+				if (t == 1)
+					break;
+			}
+
+			img2.at<uchar>(i, j) = t == 1 ? 255 : 0;
+
+		}
+	return img2;
+
 }
 
 
