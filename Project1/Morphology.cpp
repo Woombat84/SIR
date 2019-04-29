@@ -137,8 +137,8 @@ void Morphology::Dilate(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 			}
 			else {
 
-				for (int count = 0; count < Structure.rows && Hit; count++) {
-					for (int count_2 = 0; count_2 < Structure.cols && Hit; count_2++) {
+				for (int count = 0; count < Structure.rows; count++) {
+					for (int count_2 = 0; count_2 < Structure.cols; count_2++) {
 
 						if (Hit) {} // if we found a hit previously, don't do more for this pixel
 						else if (Input.at<uchar>(x - centreX + count, y - centreY + count_2) &&
