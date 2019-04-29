@@ -107,12 +107,22 @@ void prossecing::drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myCo
 	imshow("bound", img);
 
 }
-
+/*
+% Function : Coloured to greyscaled image.
+%
+% Description : This function converts a coloured image to a greyscaled image(B/W)
+%
+%
+% Parameters : An image .
+%
+% Return : A openCV Mat.
+%
+*/
 
 cv::Mat prossecing::greyscale(cv::Mat &img) {
 	
 	cv::Mat newImg = cv::Mat(img.rows,img.cols, CV_8UC1);
-	for (int y = 0; y <= img.rows-1; y++) {//sætter x og y værdierne
+	for (int y = 0; y <= img.rows-1; y++) {
 		for (int x = 0; x <= img.cols-1; x++) {
 			
 			 newImg.at<uchar>(y, x) = wr * img.at<cv::Vec3b>(y, x)[0] + wg * img.at<cv::Vec3b>(y, x)[1] + wb * img.at<cv::Vec3b>(y, x)[2];//weight
