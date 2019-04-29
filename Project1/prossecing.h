@@ -6,8 +6,7 @@
 
 
 
-using namespace std;
-using namespace cv;
+
 class prossecing
 {
 public:  //Methodes
@@ -17,10 +16,7 @@ public:  //Methodes
 	//this function checks if the Point myPoint is in the my_contours already
 	// returns 1 if yes and 0 if no
 	int isIn(cv::Point myPoint);
-<<<<<<< HEAD
-	void rob_findCountor(cv::Mat& img, cv::Point myPoint, int tresholdValue);
-	void rob_findContours(cv::Mat& img, int treshold);
-	void drawImage(cv::Mat& img);
+
 	cv::Mat greyscale(cv::Mat& img);
 	cv::Mat threshold(cv::Mat& Old, int binaryThreshold);
 	
@@ -28,25 +24,23 @@ public:  //Methodes
 	std::vector<std::vector<cv::Point>> blob(cv::Mat img);
 
 	void blobRecursiv(cv::Mat& blob, int x, int y);
-=======
+
 
 
 	// it is a  recursive function that check if any of the neighbours of the Point myPoint has a 
 	void rob_findCountor(cv::Mat img, cv::Point myPoint, int tresholdValue);
 
 	// its the function that finds the contours
-	vector<vector<Point>> rob_findContours(cv::Mat img, int treshold);
+	std::vector<std::vector<cv::Point>> rob_findContours(cv::Mat img, int treshold);
 
 
 	//draws the conours
-	void drawImage(Mat img, vector<vector<Point>> myContours);
-	void greyscale(cv::Mat& img);
-	void threshold(cv::Mat& img); 
-	Mat rob_bluring(Mat img, int k);
-	Mat rob_dilation(Mat img, int k);
-	Mat rob_erosion(Mat img, int k);
+	void drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours);
+	cv::Mat rob_bluring(cv::Mat img, int k);
+	cv::Mat rob_dilation(cv::Mat img, int k);
+	cv::Mat rob_erosion(cv::Mat img, int k);
 
->>>>>>> Mihai
+
 	
 
 private: //Methodes
@@ -65,8 +59,10 @@ private: //members
 	int8_t BitValue = 0;
 	std::vector<cv::Point>	my_vector;
 	std::vector<std::vector<cv::Point>>  my_contours;
-	std::vector<std::vector<cv::Point>> Blobs_detected;
+	
+	
 	//variabels for blob detection
+	std::vector<std::vector<cv::Point>> Blobs_detected;
 	std::vector<cv::Point> blob_vector;
 	int counterBlob = 0;
 	int maxCounterBlob =2000;

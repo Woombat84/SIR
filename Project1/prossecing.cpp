@@ -51,7 +51,7 @@ int prossecing::isIn(cv::Point myPoint)
 	return 0;
 }
 
-vector<vector<Point>> prossecing::rob_findContours(cv::Mat img, int treshold)
+std::vector<std::vector<cv::Point>> prossecing::rob_findContours(cv::Mat img, int treshold)
 
 {
 	//	img = contrast(img, 1);
@@ -92,7 +92,7 @@ void prossecing::rob_findCountor(cv::Mat img, cv::Point myPoint,int tresholdValu
 }
 
 
-void prossecing::drawImage(cv::Mat img, vector<vector<Point>> myContours)
+void prossecing::drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours)
 {
 	for (int i = 0; i < img.rows; i++)
 		for (int j = 0; j < img.cols; j++)
@@ -150,45 +150,11 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 }
 
 
-/*
-% Function : Gather all blobs .
-%
-% Description : This function runs thrugh the image until it findes a undeteted blob.
-%				A helper function to run thruohg each blob is created called blobRecursiv.
-%
-%
-% Parameters : An image.
-%
-% Return : A vector of vectors of points.
-%
-*/
-std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
-{
- cv::Mat blobdet = cv::Mat(img.rows, img.cols, CV_8UC1);
- blobdet = img;
- int counterVec = 0;
-	for (int y = 0; y < blobdet.rows; y++) {
-		for (int x = 0; x < blobdet.cols; x++) {
-			if (blobdet.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
-			else {
-				noPixLeft = false;
-				//std::cout <<"in"<< std::endl;
-				blobRecursiv(blobdet, x, y);
-				counterVec++;
-				std::cout << "vector size of number " << counterVec << ": "<< blob_vector.size() <<  std::endl;
-				
-				Blobs_detected.push_back(blob_vector);
-				blob_vector.clear();
-			}
-			
-		}
-	}
-	return Blobs_detected;
-}
 
-Mat prossecing::rob_bluring(Mat img, int k)
+
+cv::Mat prossecing::rob_bluring(cv::Mat img, int k)
 {
-	Mat img2 = img;
+	cv::Mat img2 = img;
 
 	for (int i = k / 2; i < img.rows - (k / 2); i++)
 		for (int j = k / 2; j < img.cols - (k / 2); j++)
@@ -206,9 +172,9 @@ Mat prossecing::rob_bluring(Mat img, int k)
 
 }
 
-Mat prossecing::rob_dilation(Mat img, int k) {
+cv::Mat prossecing::rob_dilation(cv::Mat img, int k) {
 
-	Mat img2 = img;
+	cv::Mat img2 = img;
 	int d = 0;
 
 	for (int i = k / 2; i < img.rows - (k / 2); i++)
@@ -232,9 +198,9 @@ Mat prossecing::rob_dilation(Mat img, int k) {
 
 }
 
-Mat prossecing::rob_erosion(Mat img, int k) {
+cv::Mat prossecing::rob_erosion(cv::Mat img, int k) {
 
-	Mat img2 = img;
+	cv::Mat img2 = img;
 
 	for (int i = k / 2; i < img.rows - (k / 2); i++)
 		for (int j = k / 2; j < img.cols - (k / 2); j++)
@@ -255,6 +221,43 @@ Mat prossecing::rob_erosion(Mat img, int k) {
 		}
 	return img2;
 
+}
+
+
+/*
+% Function : Gather all blobs .
+%
+% Description : This function runs thrugh the image until it findes a undeteted blob.
+%				A helper function to run thruohg each blob is created called blobRecursiv.
+%
+%
+% Parameters : An image.
+%
+% Return : A vector of vectors of points.
+%
+*/
+std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
+{
+	cv::Mat blobdet = cv::Mat(img.rows, img.cols, CV_8UC1);
+	blobdet = img;
+	int counterVec = 0;
+	for (int y = 0; y < blobdet.rows; y++) {
+		for (int x = 0; x < blobdet.cols; x++) {
+			if (blobdet.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
+			else {
+				noPixLeft = false;
+				//std::cout <<"in"<< std::endl;
+				blobRecursiv(blobdet, x, y);
+				counterVec++;
+				std::cout << "vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
+
+				Blobs_detected.push_back(blob_vector);
+				blob_vector.clear();
+			}
+
+		}
+	}
+	return Blobs_detected;
 }
 
 
