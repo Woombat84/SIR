@@ -134,7 +134,7 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 	cv::Mat New = cv::Mat(Old.rows, Old.cols, CV_8UC1);
 	for (int y = 0; y < Old.rows; y++) {
 		for (int x = 0; x < Old.cols; x++) {
-			if (Old.at <int8_t>(y, x) > 10) {
+			if (Old.at <int8_t>(y, x) < binaryThreshold) {
 				New.at<int8_t>(y, x) = 255;
 			}
 			else {
