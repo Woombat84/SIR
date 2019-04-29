@@ -5,13 +5,19 @@
 #include <iostream>
 
 
+
+using namespace std;
+using namespace cv;
 class prossecing
 {
 public:  //Methodes
 	prossecing();
 	~prossecing();
 
+	//this function checks if the Point myPoint is in the my_contours already
+	// returns 1 if yes and 0 if no
 	int isIn(cv::Point myPoint);
+<<<<<<< HEAD
 	void rob_findCountor(cv::Mat& img, cv::Point myPoint, int tresholdValue);
 	void rob_findContours(cv::Mat& img, int treshold);
 	void drawImage(cv::Mat& img);
@@ -22,6 +28,25 @@ public:  //Methodes
 	std::vector<std::vector<cv::Point>> blob(cv::Mat img);
 
 	void blobRecursiv(cv::Mat& blob, int x, int y);
+=======
+
+
+	// it is a  recursive function that check if any of the neighbours of the Point myPoint has a 
+	void rob_findCountor(cv::Mat img, cv::Point myPoint, int tresholdValue);
+
+	// its the function that finds the contours
+	vector<vector<Point>> rob_findContours(cv::Mat img, int treshold);
+
+
+	//draws the conours
+	void drawImage(Mat img, vector<vector<Point>> myContours);
+	void greyscale(cv::Mat& img);
+	void threshold(cv::Mat& img); 
+	Mat rob_bluring(Mat img, int k);
+	Mat rob_dilation(Mat img, int k);
+	Mat rob_erosion(Mat img, int k);
+
+>>>>>>> Mihai
 	
 
 private: //Methodes
