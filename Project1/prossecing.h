@@ -19,7 +19,7 @@ public:  //Methodes
 	cv::Mat threshold(cv::Mat& Old, int binaryThreshold);
 	
 
-	std::vector<std::vector<cv::Point>> blob(cv::Mat& img);
+	std::vector<std::vector<cv::Point>> blob(cv::Mat img);
 
 	void blobRecursiv(cv::Mat& blob, int x, int y);
 	
@@ -40,7 +40,16 @@ private: //members
 	int8_t BitValue = 0;
 	std::vector<cv::Point>	my_vector;
 	std::vector<std::vector<cv::Point>>  my_contours;
-	std::vector<cv::Point> blob_vector;
 	std::vector<std::vector<cv::Point>> Blobs_detected;
+	//variabels for blob detection
+	std::vector<cv::Point> blob_vector;
+	int counterBlob = 0;
+	int maxCounterBlob =2000;
+	int countX = 0;
+	int countY = 0;
+	bool maxCounter = false;
+	bool noPixLeft = false;
+	
+	
 };
 
