@@ -159,3 +159,15 @@ void Morphology::Dilate(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 	}
 }
 
+void Morphology::Opening(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
+	cv::Mat Temp = cv::Mat(Input.rows, Input.cols, CV_8UC1);
+	Morphology::Erode(Input, Temp, Structure);
+	Morphology::Dilate(Temp, Output, Structure);
+}
+
+void Morphology::Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
+	cv::Mat Temp = cv::Mat(Input.rows, Input.cols, CV_8UC1);
+	Morphology::Dilate(Input, Temp, Structure);
+	Morphology::Erode(Temp, Output, Structure);
+}
+
