@@ -129,6 +129,7 @@
     <ClCompile Include="Features.cpp" />
     <ClCompile Include="IMUData.cpp" />
     <ClCompile Include="Knn.cpp" />
+    <ClCompile Include="Morphology.cpp" />
     <ClCompile Include="prossecing.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="Features.h" />
     <ClInclude Include="IMUData.h" />
     <ClInclude Include="Knn.h" />
+    <ClInclude Include="Morphology.h" />
     <ClInclude Include="prossecing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

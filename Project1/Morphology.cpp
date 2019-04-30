@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "Morphology.h"
 
 
@@ -137,13 +137,9 @@ void Morphology::Dilate(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 			}
 			else {
 
-<<<<<<< HEAD
-				for (int count = 0; count < Structure.rows && Hit; count++) {
-					for (int count_2 = 0; count_2 < Structure.cols && Hit; count_2++) {
-=======
+
 				for (int count = 0; count < Structure.rows; count++) {
 					for (int count_2 = 0; count_2 < Structure.cols; count_2++) {
->>>>>>> d2b66f1d027d82b9d6077d853f73af850725bd2c
 
 						if (Hit) {} // if we found a hit previously, don't do more for this pixel
 						else if (Input.at<uchar>(x - centreX + count, y - centreY + count_2) &&
@@ -164,8 +160,7 @@ void Morphology::Dilate(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 	}
 }
 
-<<<<<<< HEAD
-=======
+
 void Morphology::Opening(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 	cv::Mat Temp = cv::Mat(Input.rows, Input.cols, CV_8UC1);
 	Morphology::Erode(Input, Temp, Structure);
@@ -178,4 +173,4 @@ void Morphology::Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 	Morphology::Erode(Temp, Output, Structure);
 }
 
->>>>>>> d2b66f1d027d82b9d6077d853f73af850725bd2c
+
