@@ -19,6 +19,7 @@
 
 
 
+
 prossecing::prossecing()
 {
 }
@@ -46,7 +47,7 @@ std::vector<T>operator+(const std::vector<T> &A, const std::vector<T> &B)
 int prossecing::isIn(cv::Point myPoint)
 {
 	for (int i = 0; i < my_contours.size(); i++)
-		if (find(my_contours[i].begin(), my_contours[i].end(), myPoint) != my_contours[i].end())
+		if (find(my_contours[i].begin(), my_contours[i].end(), myPoint) != my_contours[i].end())  //find function takes as arguments first element from a vector, the index of the last one and the item to search 
 			return 1;
 	return 0;
 }
@@ -57,11 +58,14 @@ std::vector<std::vector<cv::Point>> prossecing::rob_findContours(cv::Mat img, in
 	//	img = contrast(img, 1);
 	std::vector<cv::Point> anotherVector;
 	cv::imshow("Frame", img);
+	//this part goes throw the image
 	for (int i = 0; i < img.rows; i++)
 		for (int j = 0; j < img.cols - 1; j++)
+			//if finds 2 near pixels that have the intensity difference bigger or equal to treshold and that pixel is not in the my_contours, then it begins to find the contours from that point
 			if ((abs(img.at<uchar>(i, j + 1) - img.at<uchar>(i, j)) >= treshold) && !isIn(cv::Point(j, i)))
 			{
 				rob_findCountor(img, cv::Point(j, i), treshold);
+				//I copy my result boundary vector to another one and add it to the list of boundaries "my_contours"
 				anotherVector = my_vector;
 				my_contours.push_back(anotherVector);
 				my_vector.clear();
@@ -76,15 +80,20 @@ void prossecing::rob_findCountor(cv::Mat img, cv::Point myPoint,int tresholdValu
 
 {
 	//	Point newPoint;
+	//this is the coefficient that shows how many pixel distance to search from the given pixel for another boundary pixel
 	int dif = 1;
+	// adds the point given to the boundary vector
 	my_vector.push_back(myPoint);
+	//checks if the given point has at least "dif" points distance in every direction
 	if ((myPoint.x >= dif || myPoint.x < img.cols - dif) && (myPoint.y >= dif || myPoint.y < img.rows - dif))
 	{
+		//goes around the given point and search for any near boundary point
 		for (int i = -dif; i <= dif; i++)
 			for (int j = -dif; j <= dif; j++)
 			{
 				cv::Point newPoint{ myPoint.x + i, myPoint.y + j };
 
+				//if it finds one then it goes in the same function with the founded point
 				if ((abs(img.at<uchar>(newPoint) - img.at<uchar>(myPoint)) >= tresholdValue) && (find(my_vector.begin(), my_vector.end(), newPoint) == my_vector.end()))
 					rob_findCountor(img, newPoint, tresholdValue);
 			}
@@ -94,11 +103,13 @@ void prossecing::rob_findCountor(cv::Mat img, cv::Point myPoint,int tresholdValu
 
 void prossecing::drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours)
 {
+//	makes the  image white
 	for (int i = 0; i < img.rows; i++)
 		for (int j = 0; j < img.cols; j++)
 			img.at<cv::Vec3b>(i, j) = cv::Vec3b{ 255,255,255 };
 
 	int s = myContours.size();
+	//draws the contours in red
 	for (int i = 0; i < s; i++)
 		for (int j = 0; j < myContours[i].size(); j++)
 			img.at<cv::Vec3b>(myContours[i][j]) = cv::Vec3b{ 0,0,255 };
@@ -163,76 +174,50 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 
 
 
-cv::Mat prossecing::rob_bluring(cv::Mat img, int k)
+cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type = 1)
 {
 	cv::Mat img2 = img;
+	int nrOfEl = 0;
+	if (type == 1) {
+		nrOfEl = k * k;
+		//goes from the size of kernel /2, to the size of the image - (size of kernel /2)  
+		for (int i = k / 2; i < img.rows - (k / 2); i++)
+			for (int j = k / 2; j < img.cols - (k / 2); j++)
+			{
+				int s = 0;
+				//sums all the points around the point Point{j,i}, - left or top points, + right or botton points
+				for (int ii = -k / 2; ii <= k / 2; ii++)
+					for (int jj = -k / 2; jj <= k / 2; jj++)
+						s += img.at<uchar>(i + ii, j + jj);
+				//finds the average value;
+				int c = round(s / (nrOfEl));
+				img2.at<uchar>(i, j) = c;
 
-	for (int i = k / 2; i < img.rows - (k / 2); i++)
-		for (int j = k / 2; j < img.cols - (k / 2); j++)
-		{
-			int s = 0;
-			for (int ii = -k / 2; ii <= k / 2; ii++)
-				for (int jj = -k / 2; jj <= k / 2; jj++)
-					s += img.at<uchar>(i + ii, j + jj);
-			int c = round(s / (k * k));
-			img2.at<uchar>(i, j) = c;
-
-		}
-
-	return img2;
-
-}
-
-cv::Mat prossecing::rob_dilation(cv::Mat img, int k) {
-
-	cv::Mat img2 = img;
-	int d = 0;
-
-	for (int i = k / 2; i < img.rows - (k / 2); i++)
-		for (int j = k / 2; j < img.cols - (k / 2); j++)
-		{
-			int t = 0;
-			for (int ii = -k / 2; ii <= k / 2; ii++) {
-				for (int jj = -k / 2; jj <= k / 2; jj++)
-					if (img.at<uchar>(i + ii, j + jj) == 0) {
-						t = 1;
-						break;
-					}
-				if (t == 1)
-					break;
 			}
+	}
+	else if (type == 0) {
+		for (int i = k / 2; i < img.rows - (k / 2); i++)
+			for (int j = k / 2; j < img.cols - (k / 2); j++)
+			{
+				int s = 0;
+				for (int ii = -k / 2; ii <= k / 2; ii++)
+					for (int jj = -k / 2; jj <= k / 2; jj++)
+						//checks if the Point{i+ii,j+ii} is in the radius of the middle point Point{i,j}
+						if (rob_distance(cv::Point{ i,j }, cv::Point{ i + ii,j + jj }) <= (k / 2)) {
+							s += img.at<uchar>(i + ii, j + jj);
+							nrOfEl++;
+						}
+				int c = round(s / (nrOfEl));
+				img2.at<uchar>(i, j) = c;
 
-			img2.at<uchar>(i, j) = t == 1 ? 0 : 255;
-
-		}
-	return img2;
-
-}
-
-cv::Mat prossecing::rob_erosion(cv::Mat img, int k) {
-
-	cv::Mat img2 = img;
-
-	for (int i = k / 2; i < img.rows - (k / 2); i++)
-		for (int j = k / 2; j < img.cols - (k / 2); j++)
-		{
-			int t = 0;
-			for (int ii = -k / 2; ii <= k / 2; ii++) {
-				for (int jj = -k / 2; jj <= k / 2; jj++)
-					if (img.at<uchar>(i + ii, j + jj) == 255) {
-						t = 1;
-						break;
-					}
-				if (t == 1)
-					break;
 			}
+	}
 
-			img2.at<uchar>(i, j) = t == 1 ? 255 : 0;
-
-		}
 	return img2;
 
 }
+
+
 
 
 /*
@@ -346,4 +331,11 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			return;
 		}
 	}	
+}
+
+
+
+float prossecing::rob_distance(cv::Point point1, cv::Point point2) {
+
+	return sqrt((point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y));
 }

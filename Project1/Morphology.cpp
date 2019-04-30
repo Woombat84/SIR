@@ -173,4 +173,31 @@ void Morphology::Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) {
 	Morphology::Erode(Temp, Output, Structure);
 }
 
+cv::Mat Morphology::discKernel(int size) {
+	//creates a Mat of Size size full with zeros
+	cv::Mat kern = cv::Mat::zeros(size, size, CV_8U);
+	int center = size / 2;
+	for (int i = 0; i < kern.rows; i++)
+		for (int j = 0; j < kern.cols; j++)
+			//checks if the point Point{i,j} is in the radius of center point      //because we work in a 2D array, the radius is not float(size / 2.0) (for 3 will be 1.5), but int(size/2) (for 3 will be 1)  
+			//if the point is in the radius, then makes the point 1
+			if (rob_distance(cv::Point{ center,center }, cv::Point{ i,j }) <= (size / 2))
+				kern.at<uchar>(i, j) = 1;
+
+	//if you want to see the kernel uncomment this
+	//for (int i = 0; i < kern.rows; i++)
+	//{
+	//	for (int j = 0; j < kern.cols; j++)
+	//		cout << int(kern.at<uchar>(i, j));
+	//	cout << endl;
+	//}
+	return kern;
+
+}
+
+float Morphology::rob_distance(cv::Point point1, cv::Point point2) {
+
+	return sqrt((point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y));
+}
+
 

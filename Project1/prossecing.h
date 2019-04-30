@@ -34,11 +34,11 @@ public:  //Methodes
 	std::vector<std::vector<cv::Point>> rob_findContours(cv::Mat img, int treshold);
 
 
-	//draws the conours
+	//draws the contours
 	void drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours);
-	cv::Mat rob_bluring(cv::Mat img, int k);
-	cv::Mat rob_dilation(cv::Mat img, int k);
-	cv::Mat rob_erosion(cv::Mat img, int k);
+	//blurs the image img, with a kernel of size k, (type 1 - square,   type 0 - disc), by default is type 1
+	cv::Mat rob_bluring(cv::Mat img, int k,int type=1);
+	float rob_distance(cv::Point point1, cv::Point point2);//finds the distance between 2 points
 
 
 	
