@@ -165,7 +165,7 @@ void IMUData::XZdeg(float& X, float& Z)
 */
 float IMUData::highPass(float deg)
 {
-
+	return 0.0f;
 }
 
 
@@ -183,5 +183,5 @@ float IMUData::highPass(float deg)
 float IMUData::lowPass(float deg)
 {
 
-
+	return 0.0f;
 }

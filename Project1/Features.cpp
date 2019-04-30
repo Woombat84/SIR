@@ -16,7 +16,7 @@ Features::~Features()
 {
 }
 
-float Features::BlobCircularity(int BlobArea, int BlobPerimeter) 
+float Features::BlobCircularity(int BlobArea, int BlobPerimeter)
 {
 	float Circularity = (4 * PI * BlobArea) / (BlobPerimeter * BlobPerimeter);
 	return Circularity;
