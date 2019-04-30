@@ -136,7 +136,8 @@ cv::Mat prossecing::greyscale(cv::Mat &img) {
 % Function : Greyscale to binary.
 %
 % Description : This function converts a greyscale image to a binary image(B/W)
-%				
+%				Inverting so the object is with an background becomes black
+%				tested at 245 works well with wite background
 %
 % Parameters : An image and a threshold.
 %
