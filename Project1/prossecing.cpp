@@ -278,7 +278,8 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 		blob_vector.push_back(cv::Point{ x, y });
 	}
 	while (noPixLeft == false){
-		//Looking at the arms in this order: left,up, right, down.
+		//When the max number of recusive function are reached the x,y coordinate has to be stored 
+		//A holder is set to true to itorate back througe the functions
 		if (counterBlob >= maxCounterBlob) {	
 			countX = x;
 			countY = y;
@@ -286,18 +287,18 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			maxCounter = true;
 			return;
 		}
-
+		//this goes back the recurecive function until x is left
 		if (counterBlob >=750 && maxCounter == true) {
 			counterBlob--;
 			return;
 		}
-
+		//this releases the hold maxCounter add set the the new x,y coordinates
 		if (counterBlob <=750 && maxCounter == true) {	
 			x = countX;
 			y = countY;
 			maxCounter = false;
 		}
-
+		//Looking at the arms in this order: left,up, right, down.
 		//Looking left 
 		if (blobNew.at<uchar>(y, x - 1) > BitValue && maxCounter == false) {
 			//std::cout << "Looking left: " << x - 1 << " , " << y << std::endl;
