@@ -172,9 +172,7 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 }
 
 
-
-
-cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type = 1)
+cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
 {
 	cv::Mat img2 = img;
 	int nrOfEl = 0;
@@ -339,4 +337,37 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 float prossecing::rob_distance(cv::Point point1, cv::Point point2) {
 
 	return sqrt((point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y));
+}
+
+
+/*
+% Function :setting a threshold for binary image.
+%
+% Description : running through the new f(x,y) contra the old and setting a percentage for thresholding.
+%
+% Parameters : An image, x and y coordinates + a float "V" to set how many percentages we want.
+%
+% Return : nothing.
+%
+*/
+void prossecing::binaryThreshold(cv::Mat& old, float V)
+{
+	int old_value = 0;
+	int count=0;
+	for (int y = 0; y < old.rows; y++) {
+		for (int x = 0; x < old.cols; x++) {
+
+			old_value = (old.at <int8_t>(y, x) + old_value);
+			count++;
+			
+
+		}
+
+	}
+	float percent = (old_value / count) * 100;
+
+	int percentValue = percent * V;
+	
+	return;
+	
 }

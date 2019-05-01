@@ -19,6 +19,7 @@ public:  //Methodes
 
 	cv::Mat greyscale(cv::Mat& img);
 	cv::Mat threshold(cv::Mat& Old, int binaryThreshold);
+ 
 	
 
 	std::vector<std::vector<cv::Point>> blob(cv::Mat img);
@@ -38,7 +39,10 @@ public:  //Methodes
 	void drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours);
 	//blurs the image img, with a kernel of size k, (type 1 - square,   type 0 - disc), by default is type 1
 	cv::Mat rob_bluring(cv::Mat img, int k,int type=1);
-	float rob_distance(cv::Point point1, cv::Point point2);//finds the distance between 2 points
+	float rob_distance(cv::Point point1, cv::Point point2);
+	//finds the threshold value in percentages.
+	void binaryThreshold(cv::Mat& old, float V);
+	//finds the distance between 2 points
 
 
 	
@@ -70,6 +74,10 @@ private: //members
 	int countY = 0;
 	bool maxCounter = false;
 	bool noPixLeft = false;
+	
+	//variable for binaryThreshold
+	float V = 0.4; // here we set what percentage of the thresholded image is needed.
+
 	
 	
 };
