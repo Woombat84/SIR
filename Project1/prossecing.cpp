@@ -1,6 +1,6 @@
 /*
 %
-% This Header Cpp files Prossecing is used to prossecing the image from the 
+% This Header Cpp files Prossecing is used to prossecing the image from the
 % Intel RealSense d435i.
 %
 % Author1: 19gr466
@@ -31,7 +31,7 @@ prossecing::~prossecing()
 
 
 //this template is a template for + operation for vectors
-// <T> means every type 
+// <T> means every type
 template <typename T>
 std::vector<T>operator+(const std::vector<T> &A, const std::vector<T> &B)
 {
@@ -47,7 +47,7 @@ std::vector<T>operator+(const std::vector<T> &A, const std::vector<T> &B)
 int prossecing::isIn(cv::Point myPoint)
 {
 	for (int i = 0; i < my_contours.size(); i++)
-		if (find(my_contours[i].begin(), my_contours[i].end(), myPoint) != my_contours[i].end())  //find function takes as arguments first element from a vector, the index of the last one and the item to search 
+		if (find(my_contours[i].begin(), my_contours[i].end(), myPoint) != my_contours[i].end())  //find function takes as arguments first element from a vector, the index of the last one and the item to search
 			return 1;
 	return 0;
 }
@@ -131,13 +131,13 @@ void prossecing::drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myCo
 */
 
 cv::Mat prossecing::greyscale(cv::Mat &img) {
-	
+
 	cv::Mat newImg = cv::Mat(img.rows,img.cols, CV_8UC1);
 	for (int y = 0; y <= img.rows-1; y++) {
 		for (int x = 0; x <= img.cols-1; x++) {
-			
+
 			 newImg.at<uchar>(y, x) = wr * img.at<cv::Vec3b>(y, x)[0] + wg * img.at<cv::Vec3b>(y, x)[1] + wb * img.at<cv::Vec3b>(y, x)[2];//weight
-			
+
 		}
 	}
 	return newImg;
@@ -180,7 +180,7 @@ cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
 	int nrOfEl = 0;
 	if (type == 1) {
 		nrOfEl = k * k;
-		//goes from the size of kernel /2, to the size of the image - (size of kernel /2)  
+		//goes from the size of kernel /2, to the size of the image - (size of kernel /2)
 		for (int i = k / 2; i < img.rows - (k / 2); i++)
 			for (int j = k / 2; j < img.cols - (k / 2); j++)
 			{
@@ -234,13 +234,13 @@ cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
 %
 */
 std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
-{	
+{
 	//Declaring a new image to blob detection
 	cv::Mat blobdet = cv::Mat(img.rows, img.cols, CV_8UC1);
 	for (int y = 0; y < blobdet.rows; y++) {
 		for (int x = 0; x < blobdet.cols; x++) {
-			blobdet.at<uchar>(y, x) = img.at<uchar>(y, x); 
-			
+			blobdet.at<uchar>(y, x) = img.at<uchar>(y, x);
+
 		}
 	}
 	//Declaring a new image to find the egde"perimetor" of the blob
@@ -269,7 +269,7 @@ std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
 				//pusing the blob vector of one blob in to a into a holding vector
 				//If the area of the blob is larger than x store the vector
 				//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
-				
+
 				if (blob_vector.size() > 6) {
 					//std::cout <<  blob_vector[0] << std::endl;
 					Blobs_detected.push_back(blob_vector);
@@ -282,19 +282,19 @@ std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
 
 				}
 				// debugging
-				
+
 				counterVec++;
 				//std::cout << perimeterVector[0] << std::endl;
 				//std::cout << perimeterVector[perimeterVector.size()-1] << std::endl;
-				
-				//clearing the inner vector of blob and the perimetor to reuse it  
+
+				//clearing the inner vector of blob and the perimetor to reuse it
 				blob_vector.clear();
 				perimeterVector.clear();
-				
+
 			}
 
 		}
-		
+
 	}
 
 	//std::cout << "done" << std::endl;
@@ -305,7 +305,7 @@ std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
 /*
 % Function : Recursive storing of points in a blob .
 %
-% Description : This function is deteting all pixels in a blob and stor them 
+% Description : This function is deteting all pixels in a blob and stor them
 %				in a vetor.
 %
 % Parameters : An image, x and y coordinates.
@@ -314,7 +314,7 @@ std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
 %
 */
 void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
-	
+
 	//Using the cross mention in the grassfire algo
 	//First burning the pixel that the cross lands on
 	if (blobNew.at<uchar>(y, x) != 0) {
@@ -323,9 +323,9 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 		blob_vector.push_back(cv::Point{ x, y });
 	}
 	while (noPixLeft == false){
-		//When the max number of recusive function are reached the x,y coordinate has to be stored 
+		//When the max number of recusive function are reached the x,y coordinate has to be stored
 		//A holder is set to true to itorate back througe the functions
-		if (counterBlob >= maxCounterBlob) {	
+		if (counterBlob >= maxCounterBlob) {
 			countX = x;
 			countY = y;
 			counterBlob--;
@@ -338,13 +338,13 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			return;
 		}
 		//this releases the hold maxCounter add set the the new x,y coordinates
-		if (counterBlob <=750 && maxCounter == true) {	
+		if (counterBlob <=750 && maxCounter == true) {
 			x = countX;
 			y = countY;
 			maxCounter = false;
 		}
 		//Looking at the arms in this order: right,up, left, down.
-		//Looking right 
+		//Looking right
 		if (blobNew.at<uchar>(y, x + 1) > BitValue && maxCounter == false) {
 			//std::cout << "Looking left: " << x - 1 << " , " << y << std::endl;
 			counterBlob++;
@@ -365,7 +365,7 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			//std::cout << counterBlob << std::endl;
 			blobRecursiv(blobNew, x - 1, y);
 		}
-		//Looking down	
+		//Looking down
 		if (blobNew.at<uchar>(y + 1, x) > BitValue && maxCounter == false) {
 			//std::cout << "Looking down: " << x << " , " << y + 1 << std::endl;
 			counterBlob++;
@@ -373,10 +373,10 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			blobRecursiv(blobNew, x, y + 1);
 		}
 		else{
-			counterBlob--; 
+			counterBlob--;
 			return;
 		}
-	}	
+	}
 }
 /*
 % Function : perimeterBlob.
@@ -390,23 +390,23 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 %
 */
 std::vector<cv::Point> prossecing::perimeterBlob(cv::Mat& img, int x ,int y) {
-	
+
 	std::vector<cv::Point> v;
 	bool end = false;
 	int startX = x;
-	int startY = y+1; 
-	int xx = x;  
-	int yy = y; 
+	int startY = y+1;
+	int xx = x;
+	int yy = y;
 	int endX = 0;
 	int endY = 0;
 	v.push_back(cv::Point{ xx, yy });
 	std::cout << "start  : " << startX << " : " << startY << std::endl;
 	while (end==false) {
-		
-		//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be white 
+
+		//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be white
 		if (img.at<uchar>(yy , xx-1) == 0 && img.at<uchar>(yy - 1, xx) == 255){
 			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
-			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
 			yy--; //moving up in the image
 			endX = xx;
 			endY = yy;
@@ -416,47 +416,47 @@ std::vector<cv::Point> prossecing::perimeterBlob(cv::Mat& img, int x ,int y) {
 			if (startX == endX && startY == endY) {
 				std::cout << "drop out" << std::endl;
 				v.push_back(cv::Point{ xx, yy });
-				
+
 				return v;
 			}
-		} 
-		//Looking right, in a 9 x9 squrea top right pixel have to be black and the middel right have to be white 
+		}
+		//Looking right, in a 9 x9 squrea top right pixel have to be black and the middel right have to be white
 		if (img.at<uchar>(yy-1, xx) == 0 && img.at<uchar>(yy, xx+1) == 255) {
 			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
-			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
 			xx++; //moving right in the image
 			endX = xx;
 			endY = yy;
 			if (startX == endX && startY == endY) {
 				std::cout << "drop out" << std::endl;
 				v.push_back(cv::Point{ xx, yy });
-				
+
 				return v;
 			}
 			//std::cout << "right: " << xx <<" : " << yy << std::endl;
 		}
-		//Looking down, in a 9 x9 squrea bottum right pixel have to be black and the bottum middel have to be white 
+		//Looking down, in a 9 x9 squrea bottum right pixel have to be black and the bottum middel have to be white
 		if (img.at<uchar>(yy , xx+1) == 0  && img.at<uchar>(yy + 1, xx) == 255) {
 			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
-			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
 			yy++;	//moving down in the image
 			endX = xx;
 			endY = yy;
 			//std::cout << "down : " << xx << " : " << yy << std::endl;
 		}
-		//Looking left, in a 9 x9 squrea bottum left pixel have to be black and the middel left have to be white 
+		//Looking left, in a 9 x9 squrea bottum left pixel have to be black and the middel left have to be white
 		if (img.at<uchar>(yy+1, xx ) == 0 && img.at<uchar>(yy , xx-1) == 255) {
 			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
-			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
 			xx--;	//moving left in the image
 			endX = xx;
 			endY = yy;
 			//std::cout << "left : " << xx << " : " << yy << std::endl;
 		}
-		
 
 
-		
+
+
 	}
 }
 
@@ -464,7 +464,7 @@ std::vector<cv::Point> prossecing::perimeterBlob(cv::Mat& img, int x ,int y) {
 % Function : perimeterBlob .
 %
 % Description : This function findes the perimeter based on a vector that contains a single blob
-%				
+%
 %
 % Parameters : nonthing.
 %
@@ -472,9 +472,9 @@ std::vector<cv::Point> prossecing::perimeterBlob(cv::Mat& img, int x ,int y) {
 %
 */
 std::vector<cv::Point> prossecing::perimeterVec() {
-	
+
 	std::vector<cv::Point> v = blob_vector;
-	
+
 	int x = v[0].x;
 	int y = v[0].y;
 	unsigned int i = 0;
@@ -488,10 +488,10 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 		int y = 0;
 		unsigned int idx = 0;
 	};
-	
+
 	neighbors n[9];
-	
-	while (done ==false) 
+
+	while (done ==false)
 	{
 		v.push_back(cv::Point{ x, y });
 		if(back==false){
@@ -530,7 +530,7 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 				// middel middel squera
 				if (v.at(i).x == x && v.at(i).y == y ) {
 					n[4].square = true;
-				
+
 					//	std::cout << counterDone << std::endl;
 
 				}
@@ -555,7 +555,7 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 				//bottom middel squera
 				//neighbors
 				if (v.at(i).x == x && v.at(i).y == y + 1) {
-					n[7].square = true; 
+					n[7].square = true;
 					n[7].x = v.at(i).x;
 					n[7].y = v.at(i).y;
 					n[7].idx = i;
@@ -565,7 +565,7 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 					n[8].square = true;
 
 				}
-				// If cross has moved two steps the relase bool is turned true, so it is possible to look for 
+				// If cross has moved two steps the relase bool is turned true, so it is possible to look for
 				// Perimeter start
 				if (counterDone>2) {
 					release = true;
@@ -651,7 +651,7 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 					n[8].square = true;
 
 				}
-				// If cross has moved two steps the relase bool is turned true, so it is possible to look for 
+				// If cross has moved two steps the relase bool is turned true, so it is possible to look for
 				// Perimeter start
 				if (counterDone > 2) {
 					release = true;
@@ -685,20 +685,20 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 			y = n[5].y;
 			i = n[5].idx;
 			//std::cout << "looking rigth" << std::endl;
-			
-			
+
+
 			/// reseting struct variables
 			for (int i = 0; i <9; i++) {
-	
+
 				n[i].square = false;
 				n[i].x = 0;
 				n[i].y = 0;
 				n[i].idx = 0;
-				
+
 			}
 			counterDone++;
 		}
-		// looking down 
+		// looking down
 		if (n[2].square == false && n[5].square == false && n[7].square == true) {
 			x = n[7].x;
 			y = n[7].y;
@@ -716,7 +716,7 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 				n[i].y = 0;
 				n[i].idx = 0;
 			}
-			
+
 		}
 		// looking left
 		if (n[7].square == false && n[8].square == false && n[3].square == true) {
@@ -732,16 +732,17 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 				n[i].y = 0;
 				n[i].idx = 0;
 			}
-			
+
 		}
 		else {
 
 		}
 		//std::cout << i << std::endl;
 	}
+	int percent = (old_value / count) * V;
 
+	return;
 
-	
 }
 
 
