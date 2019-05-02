@@ -19,7 +19,6 @@
 
 
 
-
 prossecing::prossecing()
 {
 }
@@ -739,13 +738,15 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 		}
 		//std::cout << i << std::endl;
 	}
-	int percent = (old_value / count) * V;
-
-	return;
+	
 
 }
+float prossecing::percent(int old_value,int count, int V) {
 
+	float percent = (old_value / count) * V;
 
+	return percent;
+}
 float prossecing::rob_distance(cv::Point point1, cv::Point point2) {
 
 	return sqrt((point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y));

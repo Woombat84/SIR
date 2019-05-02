@@ -33,6 +33,8 @@ public:  //Methodes
 
 	std::vector<cv::Point> perimeterVec();
 
+	float percent(int old_value, int count, int V);
+
 
 
 	// it is a  recursive function that check if any of the neighbours of the Point myPoint has a 
