@@ -364,9 +364,7 @@ void prossecing::binaryThreshold(cv::Mat& old, float V)
 		}
 
 	}
-	float percent = (old_value / count) * 100;
-
-	int percentValue = percent * V;
+	int percent = (old_value / count) * V;
 	
 	return;
 	
