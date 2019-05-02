@@ -19,12 +19,19 @@ public:  //Methodes
 
 	cv::Mat greyscale(cv::Mat& img);
 	cv::Mat threshold(cv::Mat& Old, int binaryThreshold);
- 
 	
 
 	std::vector<std::vector<cv::Point>> blob(cv::Mat img);
 
 	void blobRecursiv(cv::Mat& blob, int x, int y);
+
+	std::vector<cv::Point> perimeterBlob(cv::Mat &img, int x, int y);
+
+
+
+	
+
+	std::vector<cv::Point> perimeterVec();
 
 
 
@@ -39,10 +46,7 @@ public:  //Methodes
 	void drawImage(cv::Mat img, std::vector<std::vector<cv::Point>> myContours);
 	//blurs the image img, with a kernel of size k, (type 1 - square,   type 0 - disc), by default is type 1
 	cv::Mat rob_bluring(cv::Mat img, int k,int type=1);
-	float rob_distance(cv::Point point1, cv::Point point2);
-	//finds the threshold value in percentages.
-	void binaryThreshold(cv::Mat& old, float V);
-	//finds the distance between 2 points
+	float rob_distance(cv::Point point1, cv::Point point2);//finds the distance between 2 points
 
 
 	
@@ -52,7 +56,7 @@ private: //Methodes
 
 
 public: // members
-	
+	std::vector<std::vector<cv::Point>> Perimetor;
 
 private: //members
 	int dif = 1;
@@ -68,17 +72,17 @@ private: //members
 	//variabels for blob detection
 	std::vector<std::vector<cv::Point>> Blobs_detected;
 	std::vector<cv::Point> blob_vector;
+	
 	int counterBlob = 0;
 	int maxCounterBlob =2000;
 	int countX = 0;
 	int countY = 0;
 	bool maxCounter = false;
 	bool noPixLeft = false;
-	
-	//variable for binaryThreshold
-	float V = 0.4; // here we set what percentage of the thresholded image is needed.
 
+	//variabels for perimeter	
 	
+	std::vector<cv::Point> perimeterVector;
 	
 };
 

@@ -160,16 +160,18 @@ cv::Mat prossecing::threshold(cv::Mat& Old, int binaryThreshold)
 	cv::Mat New = cv::Mat(Old.rows, Old.cols, CV_8UC1);
 	for (int y = 0; y < Old.rows; y++) {
 		for (int x = 0; x < Old.cols; x++) {
-			if (Old.at <int8_t>(y, x) < binaryThreshold) {
-				New.at<int8_t>(y, x) = 255;
+			if (Old.at <uchar>(y, x) > 245) {
+				New.at<int8_t>(y, x) = 0;
 			}
 			else {
-				New.at<int8_t>(y, x) = 0;
+				New.at<int8_t>(y, x) = 255;
 			}
 		}
 	}
 	return New;
 }
+
+
 
 
 cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
@@ -221,9 +223,10 @@ cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
 /*
 % Function : Gather all blobs .
 %
-% Description : This function runs thrugh the image until it findes a undeteted blob.
+% Description : This function runs thrugh the image until it findes a undeteted blob and
+%				the perimetor.
 %				A helper function to run thruohg each blob is created called blobRecursiv.
-%
+%				Another helper function called perimeterBlob is use to find the egdes of the blob.
 %
 % Parameters : An image.
 %
@@ -231,26 +234,70 @@ cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type)
 %
 */
 std::vector<std::vector<cv::Point>> prossecing::blob(cv::Mat img)
-{
+{	
+	//Declaring a new image to blob detection
 	cv::Mat blobdet = cv::Mat(img.rows, img.cols, CV_8UC1);
-	blobdet = img;
+	for (int y = 0; y < blobdet.rows; y++) {
+		for (int x = 0; x < blobdet.cols; x++) {
+			blobdet.at<uchar>(y, x) = img.at<uchar>(y, x); 
+			
+		}
+	}
+	//Declaring a new image to find the egde"perimetor" of the blob
+	cv::Mat primdet = cv::Mat(img.rows, img.cols, CV_8UC1);
+	for (int y = 0; y < primdet.rows; y++) {
+		for (int x = 0; x < primdet.cols; x++) {
+			primdet.at<uchar>(y , x) = img.at<uchar>(y , x);
+
+		}
+	}
+	// variabel to use in debugging for how many blobs in the frame
 	int counterVec = 0;
+
+	//Looking for the first whit pixel in the frame
 	for (int y = 0; y < blobdet.rows; y++) {
 		for (int x = 0; x < blobdet.cols; x++) {
 			if (blobdet.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
 			else {
-				noPixLeft = false;
-				//std::cout <<"in"<< std::endl;
-				blobRecursiv(blobdet, x, y);
-				counterVec++;
-				std::cout << "vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
 
-				Blobs_detected.push_back(blob_vector);
+				int yy = y;
+				int xx = x;
+				//std::cout <<"in"<< std::endl;
+
+				//getting a blob in vector form
+				blobRecursiv(blobdet, x, y);
+				//pusing the blob vector of one blob in to a into a holding vector
+				//If the area of the blob is larger than x store the vector
+				//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
+				
+				if (blob_vector.size() > 6) {
+					//std::cout <<  blob_vector[0] << std::endl;
+					Blobs_detected.push_back(blob_vector);
+					//getting a perimetor of a blob in the form of a vector
+					perimeterVector = perimeterBlob(primdet, blob_vector[0].x, blob_vector[0].y);
+					//pusing the perimetor vector of one blob in to a into a holding vector
+					Perimetor.push_back(perimeterVector);
+					std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
+					std::cout << "perimitor vector size of number " << counterVec << ": " << perimeterVector.size() << std::endl;
+
+				}
+				// debugging
+				
+				counterVec++;
+				//std::cout << perimeterVector[0] << std::endl;
+				//std::cout << perimeterVector[perimeterVector.size()-1] << std::endl;
+				
+				//clearing the inner vector of blob and the perimetor to reuse it  
 				blob_vector.clear();
+				perimeterVector.clear();
+				
 			}
 
 		}
+		
 	}
+
+	//std::cout << "done" << std::endl;
 	return Blobs_detected;
 }
 
@@ -296,13 +343,13 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			y = countY;
 			maxCounter = false;
 		}
-		//Looking at the arms in this order: left,up, right, down.
-		//Looking left 
-		if (blobNew.at<uchar>(y, x - 1) > BitValue && maxCounter == false) {
+		//Looking at the arms in this order: right,up, left, down.
+		//Looking right 
+		if (blobNew.at<uchar>(y, x + 1) > BitValue && maxCounter == false) {
 			//std::cout << "Looking left: " << x - 1 << " , " << y << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
-			blobRecursiv(blobNew, x - 1, y);
+			blobRecursiv(blobNew, x + 1, y);
 		}
 		//Looking up
 		if (blobNew.at<uchar>(y - 1, x)> BitValue && maxCounter == false) {
@@ -311,12 +358,12 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 			//std::cout << counterBlob << std::endl;
 			blobRecursiv(blobNew, x, y - 1);
 		}
-		//Looking right
-		if (blobNew.at<uchar>(y, x + 1) > BitValue && maxCounter == false) {
+		//Looking left
+		if (blobNew.at<uchar>(y, x - 1) > BitValue && maxCounter == false) {
 			//std::cout << "Looking r" << x + 1 << " , " << y << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
-			blobRecursiv(blobNew, x + 1, y);
+			blobRecursiv(blobNew, x - 1, y);
 		}
 		//Looking down	
 		if (blobNew.at<uchar>(y + 1, x) > BitValue && maxCounter == false) {
@@ -331,43 +378,374 @@ void prossecing::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 		}
 	}	
 }
+/*
+% Function : perimeterBlob.
+%
+% Description : This function findes the edges through the use of grass fire algorithem
+%
+%
+% Parameters : An image, x and y coordinates.
+%
+% Return : nonthing.
+%
+*/
+std::vector<cv::Point> prossecing::perimeterBlob(cv::Mat& img, int x ,int y) {
+	
+	std::vector<cv::Point> v;
+	bool end = false;
+	int startX = x;
+	int startY = y+1; 
+	int xx = x;  
+	int yy = y; 
+	int endX = 0;
+	int endY = 0;
+	v.push_back(cv::Point{ xx, yy });
+	std::cout << "start  : " << startX << " : " << startY << std::endl;
+	while (end==false) {
+		
+		//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be white 
+		if (img.at<uchar>(yy , xx-1) == 0 && img.at<uchar>(yy - 1, xx) == 255){
+			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			yy--; //moving up in the image
+			endX = xx;
+			endY = yy;
+			//std::cout << "up   : " << xx << " : " << yy <<  std::endl;
+			//std::cout << "up x : "<< endX << "  Y: "<< endY<< std::endl;
+			//std::cout << "en x : " << startX << "  Y: " << startY << std::endl;
+			if (startX == endX && startY == endY) {
+				std::cout << "drop out" << std::endl;
+				v.push_back(cv::Point{ xx, yy });
+				
+				return v;
+			}
+		} 
+		//Looking right, in a 9 x9 squrea top right pixel have to be black and the middel right have to be white 
+		if (img.at<uchar>(yy-1, xx) == 0 && img.at<uchar>(yy, xx+1) == 255) {
+			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			xx++; //moving right in the image
+			endX = xx;
+			endY = yy;
+			if (startX == endX && startY == endY) {
+				std::cout << "drop out" << std::endl;
+				v.push_back(cv::Point{ xx, yy });
+				
+				return v;
+			}
+			//std::cout << "right: " << xx <<" : " << yy << std::endl;
+		}
+		//Looking down, in a 9 x9 squrea bottum right pixel have to be black and the bottum middel have to be white 
+		if (img.at<uchar>(yy , xx+1) == 0  && img.at<uchar>(yy + 1, xx) == 255) {
+			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			yy++;	//moving down in the image
+			endX = xx;
+			endY = yy;
+			//std::cout << "down : " << xx << " : " << yy << std::endl;
+		}
+		//Looking left, in a 9 x9 squrea bottum left pixel have to be black and the middel left have to be white 
+		if (img.at<uchar>(yy+1, xx ) == 0 && img.at<uchar>(yy , xx-1) == 255) {
+			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+			v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v" 
+			xx--;	//moving left in the image
+			endX = xx;
+			endY = yy;
+			//std::cout << "left : " << xx << " : " << yy << std::endl;
+		}
+		
 
+
+		
+	}
+}
+
+/*
+% Function : perimeterBlob .
+%
+% Description : This function findes the perimeter based on a vector that contains a single blob
+%				
+%
+% Parameters : nonthing.
+%
+% Return : A vector containing points.
+%
+*/
+std::vector<cv::Point> prossecing::perimeterVec() {
+	
+	std::vector<cv::Point> v = blob_vector;
+	
+	int x = v[0].x;
+	int y = v[0].y;
+	unsigned int i = 0;
+	bool done = false;
+	bool release = false;
+	int counterDone = 0;
+	bool back = false;
+	struct neighbors {
+		bool square=false;
+		int x = 0;
+		int y = 0;
+		unsigned int idx = 0;
+	};
+	
+	neighbors n[9];
+	
+	while (done ==false) 
+	{
+		v.push_back(cv::Point{ x, y });
+		if(back==false){
+			for (i ; i < blob_vector.size(); i++) {
+			// top left squera
+				if (v.at(i).x == x - 1 && v.at(i).y == y - 1) {
+				n[0].square= true;
+
+				}
+				//top middel squera
+				//neighbors
+				if (v.at(i).x == x && v.at(i).y == y - 1) {
+					n[1].square = true;
+					n[1].x = v.at(i).x;
+					n[1].y = v.at(i).y;
+					n[1].idx = i;
+					if (release == true && v.at(0).x == v.at(i).x && v.at(0).y == v.at(i).y - 1) {
+						std::cout << "done" << std::endl;
+						v.push_back(cv::Point{ v.at(i).x,v.at(i).y });
+						done = true;
+					return v;
+					}
+				}
+				// top rigth squera
+				if (v.at(i).x == x + 1 && v.at(i).y == y - 1) {
+				n[2].square = true;
+				}
+				// middel left squera
+				//neighbors
+				if (v.at(i).x == x - 1 && v.at(i).y == y ) {
+					n[3].square = true;
+					n[3].x = v.at(i).x;;
+					n[3].y = v.at(i).y;
+					n[3].idx = i;
+				}
+				// middel middel squera
+				if (v.at(i).x == x && v.at(i).y == y ) {
+					n[4].square = true;
+				
+					//	std::cout << counterDone << std::endl;
+
+				}
+				// middel rigth squera
+				//neighbors
+				if (v.at(i).x == x + 1 && v.at(i).y == y ) {
+					n[5].square = true;
+					n[5].x = v.at(i).x;
+					n[5].y = v.at(i).y;
+					n[5].idx = i;
+					if (release == true && v.at(0).x == v.at(i).x +1 && v.at(0).y == v.at(i).y) {
+						//std::cout << "done" << std::endl;
+						v.push_back(cv::Point{ v.at(i).x, v.at(i).y});
+						done = true;
+						return v;
+					}
+				}
+				// bottom left squera
+				if (v.at(i).x == x - 1 && v.at(i).y == y +1) {
+					n[6].square = true;
+				}
+				//bottom middel squera
+				//neighbors
+				if (v.at(i).x == x && v.at(i).y == y + 1) {
+					n[7].square = true; 
+					n[7].x = v.at(i).x;
+					n[7].y = v.at(i).y;
+					n[7].idx = i;
+				}
+				// bottom rigth squera
+				if (v.at(i).x == x + 1 && v.at(i).y == y + 1) {
+					n[8].square = true;
+
+				}
+				// If cross has moved two steps the relase bool is turned true, so it is possible to look for 
+				// Perimeter start
+				if (counterDone>2) {
+					release = true;
+				}
+				if (i == blob_vector.size()) {
+					//std::cout << "true" <<std::endl;
+					back = true;
+				}
+			}
+		}
+		if (back==true) {
+			//std::cout << "going back" << std::endl;
+			for (i; i > 0; i--) {
+				// top left squera
+				if (v.at(i).x == x - 1 && v.at(i).y == y - 1) {
+					n[0].square = true;
+
+				}
+				//top middel squera
+				//neighbors
+				if (v.at(i).x == x && v.at(i).y == y - 1) {
+					n[1].square = true;
+					n[1].x = v.at(i).x;
+					n[1].y = v.at(i).y;
+					n[1].idx = i;
+					if (release == true && v.at(0).x == v.at(i).x && v.at(0).y == v.at(i).y - 1) {
+						//std::cout << "done" << std::endl;
+						v.push_back(cv::Point{ v.at(i).x,v.at(i).y });
+						done = true;
+						return v;
+					}
+				}
+				// top rigth squera
+				if (v.at(i).x == x + 1 && v.at(i).y == y - 1) {
+					n[2].square = true;
+				}
+				// middel left squera
+				//neighbors
+				if (v.at(i).x == x - 1 && v.at(i).y == y) {
+					//std::cout << "SQ 3" << std::endl;
+					n[3].square = true;
+					n[3].x = v.at(i).x;;
+					n[3].y = v.at(i).y;
+					n[3].idx = i;
+				}
+				// middel middel squera
+				if (v.at(i).x == x && v.at(i).y == y) {
+					n[4].square = true;
+
+					//	std::cout << counterDone << std::endl;
+
+				}
+				// middel rigth squera
+				//neighbors
+				if (v.at(i).x == x + 1 && v.at(i).y == y) {
+					n[5].square = true;
+					n[5].x = v.at(i).x;
+					n[5].y = v.at(i).y;
+					n[5].idx = i;
+					if (release == true && v.at(0).x == v.at(i).x + 1 && v.at(0).y == v.at(i).y) {
+						//std::cout << "done" << std::endl;
+						v.push_back(cv::Point{ v.at(i).x, v.at(i).y });
+						done = true;
+						return v;
+					}
+				}
+				// bottom left squera
+				if (v.at(i).x == x - 1 && v.at(i).y == y + 1) {
+					n[6].square = true;
+				}
+				//bottom middel squera
+				//neighbors
+				if (v.at(i).x == x && v.at(i).y == y + 1) {
+					//std::cout << "SQ 3 false" << std::endl;
+					n[7].square = true;
+					n[7].x = v.at(i).x;
+					n[7].y = v.at(i).y;
+					n[7].idx = i;
+				}
+				// bottom rigth squera
+				if (v.at(i).x == x + 1 && v.at(i).y == y + 1) {
+					//std::cout << "SQ 3 false" << std::endl;
+					n[8].square = true;
+
+				}
+				// If cross has moved two steps the relase bool is turned true, so it is possible to look for 
+				// Perimeter start
+				if (counterDone > 2) {
+					release = true;
+				}
+				if (i == 0) {
+					back = false;
+				}
+			}
+		}
+		//std::cout << "stop for" << std::endl;
+		/// Here the cross is moved
+		// looking up
+		if (n[3].square == false && n[6].square == false && n[1].square == true) {
+			x = n[1].x;
+			y = n[1].y;
+			i = n[1].idx;
+			//std::cout << "looking up" << std::endl;
+			/// reseting struct variables
+			for (int i = 0; i <9; i++) {
+
+				n[i].square = false;
+				n[i].x = 0;
+				n[i].y = 0;
+				n[i].idx = 0;
+			}
+			counterDone++;
+		}
+		// looking right
+		if (n[0].square == false && n[1].square == false && n[5].square == true) {
+			x = n[5].x;
+			y = n[5].y;
+			i = n[5].idx;
+			//std::cout << "looking rigth" << std::endl;
+			
+			
+			/// reseting struct variables
+			for (int i = 0; i <9; i++) {
+	
+				n[i].square = false;
+				n[i].x = 0;
+				n[i].y = 0;
+				n[i].idx = 0;
+				
+			}
+			counterDone++;
+		}
+		// looking down 
+		if (n[2].square == false && n[5].square == false && n[7].square == true) {
+			x = n[7].x;
+			y = n[7].y;
+			i = n[7].idx;
+			if (i >= blob_vector.size()-1) {
+				//std::cout << "true" << std::endl;
+				back = true;
+			}
+			//std::cout << "looking down" << std::endl;
+			/// reseting struct variables
+			for (int i = 0; i < 9; i++) {
+
+				n[i].square = false;
+				n[i].x = 0;
+				n[i].y = 0;
+				n[i].idx = 0;
+			}
+			
+		}
+		// looking left
+		if (n[7].square == false && n[8].square == false && n[3].square == true) {
+			x = n[3].x;
+			y = n[3].y;
+			i = n[3].idx;
+			//std::cout << "looking left" << std::endl;
+			/// reseting struct variables
+			for (int i = 0; i < 9; i++) {
+
+				n[i].square = false;
+				n[i].x = 0;
+				n[i].y = 0;
+				n[i].idx = 0;
+			}
+			
+		}
+		else {
+
+		}
+		//std::cout << i << std::endl;
+	}
+
+
+	
+}
 
 
 float prossecing::rob_distance(cv::Point point1, cv::Point point2) {
 
 	return sqrt((point1.x - point2.x) * (point1.x - point2.x) + (point1.y - point2.y) * (point1.y - point2.y));
-}
-
-
-/*
-% Function :setting a threshold for binary image.
-%
-% Description : running through the new f(x,y) contra the old and setting a percentage for thresholding.
-%
-% Parameters : An image, x and y coordinates + a float "V" to set how many percentages we want.
-%
-% Return : nothing.
-%
-*/
-void prossecing::binaryThreshold(cv::Mat& old, float V)
-{
-	int old_value = 0;
-	int count=0;
-	for (int y = 0; y < old.rows; y++) {
-		for (int x = 0; x < old.cols; x++) {
-
-			old_value = (old.at <int8_t>(y, x) + old_value);
-			count++;
-			
-
-		}
-
-	}
-	float percent = (old_value / count) * 100;
-
-	int percentValue = percent * V;
-	
-	return;
-	
 }
