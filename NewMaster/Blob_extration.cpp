@@ -85,7 +85,7 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 					//std::cout <<  blob_vector[0] << std::endl;
 					Blobs_detected.push_back(blob_vector);
 					
-					//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
+					std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
 					
 				}
 				// debugging

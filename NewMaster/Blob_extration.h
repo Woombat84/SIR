@@ -34,6 +34,6 @@ private: //members
 	bool maxCounter = false;
 	bool noPixLeft = false;
 	int BitValue = 0;
-	int MinBlobSize = 10;
+	int MinBlobSize = 4000;
 };
 
