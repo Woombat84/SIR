@@ -32,8 +32,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width) {
 	for (int i = 0; i < BLOB.size(); i++) {
 		img.at<uchar>(BLOB[i].y, BLOB[i].x) = 255;
 	}
-	imshow("Closed", img); //Uncomment to see image after Closing
-	cv::waitKey(1000);
+	
 	std::vector<cv::Point> v;
 	bool end = false;
 	int startX = BLOB[0].x;
@@ -75,7 +74,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width) {
 			if (startX == endX && startY+1 == endY) {
 				//std::cout << "drop out" << std::endl;
 				
-				std::cout << "right: " << xx << " : " << yy << " last stand" << std::endl;
+				//std::cout << "right: " << xx << " : " << yy << " last stand" << std::endl;
 				return v.size();
 			}
 			//std::cout << "right: " << xx <<" : " << yy << std::endl;
