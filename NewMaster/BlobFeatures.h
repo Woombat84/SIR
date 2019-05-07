@@ -4,7 +4,7 @@ struct BlobFeatures {
 	int area;
 	int perimeter;
 	float circularity;
-	float boundingCricle;
+	float boundingCircle;
 	float boundingBox;
 	float heightWidthRatio;
 };

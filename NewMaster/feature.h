@@ -11,9 +11,9 @@ public:// methodes
 	~feature();
 	
 	
-	std::vector<cv::Point> perimeterBlob(cv::Mat& img, int x, int y);
+	int perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width);
 
-	float BlobCircularity(int BlobArea, int BlobPerimeter);
+	float BlobCircularity(int BlobArea, double BlobPerimeter);
 
 	float BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width);
 

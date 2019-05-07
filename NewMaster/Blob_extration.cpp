@@ -52,6 +52,7 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 
 		}
 	}
+	/*
 	//Declaring a new image to find the egde"perimetor" of the blob
 	cv::Mat primdet = cv::Mat(img.rows, img.cols, CV_8UC1);
 	for (int y = 0; y < primdet.rows; y++) {
@@ -60,6 +61,7 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 
 		}
 	}
+	*/
 	// variabel to use in debugging for how many blobs in the frame
 	int counterVec = 0;
 
@@ -79,11 +81,11 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 				//If the area of the blob is larger than x store the vector
 				//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
 
-				if (blob_vector.size() > 6) {
+				if (blob_vector.size() > MinBlobSize) {
 					//std::cout <<  blob_vector[0] << std::endl;
 					Blobs_detected.push_back(blob_vector);
 					
-					std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
+					//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
 					
 				}
 				// debugging
@@ -123,7 +125,6 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 %
 */
 void Blob_extration::blobRecursiv(cv::Mat& blobNew, int x, int y) {
-
 	//Using the cross mention in the grassfire algo
 	//First burning the pixel that the cross lands on
 	if (blobNew.at<uchar>(y, x) != 0) {

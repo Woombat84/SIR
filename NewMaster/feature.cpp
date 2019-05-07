@@ -16,26 +16,33 @@ feature::~feature()
 /*
 % Function : perimeterBlob.
 %
-% Description : This function findes the edges through the use of grass fire algorithem
+% Description : This function finds the edges through the use of grass fire algorithm
 %
 %
 % Parameters : An image, x and y coordinates.
 %
-% Return : nonthing.
+% Return : nothing.
 %
 */
-std::vector<cv::Point> feature::perimeterBlob(cv::Mat& img, int x, int y) {
+int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width) {
+
+	//Create the BLOB in a new Matrix
+	cv::Mat img = cv::Mat::zeros(Height, Width, CV_8UC1);
+
+	for (int i = 0; i < BLOB.size(); i++) {
+		img.at<uchar>(BLOB[i].y, BLOB[i].x) = 255;
+	}
 
 	std::vector<cv::Point> v;
 	bool end = false;
-	int startX = x;
-	int startY = y + 1;
-	int xx = x;
-	int yy = y;
+	int startX = BLOB[0].x;
+	int startY = BLOB[0].y + 1;
+	int xx = startX;
+	int yy = startY;
 	int endX = 0;
 	int endY = 0;
 	v.push_back(cv::Point{ xx, yy });
-	std::cout << "start  : " << startX << " : " << startY << std::endl;
+	//std::cout << "start  : " << startX << " : " << startY << std::endl;
 	while (end == false) {
 
 		//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be white
@@ -49,10 +56,10 @@ std::vector<cv::Point> feature::perimeterBlob(cv::Mat& img, int x, int y) {
 			//std::cout << "up x : "<< endX << "  Y: "<< endY<< std::endl;
 			//std::cout << "en x : " << startX << "  Y: " << startY << std::endl;
 			if (startX == endX && startY == endY) {
-				std::cout << "drop out" << std::endl;
+				//std::cout << "drop out" << std::endl;
 				v.push_back(cv::Point{ xx, yy });
 
-				return v;
+				return v.size();
 			}
 		}
 		//Looking right, in a 9 x9 squrea top right pixel have to be black and the middel right have to be white
@@ -63,10 +70,10 @@ std::vector<cv::Point> feature::perimeterBlob(cv::Mat& img, int x, int y) {
 			endX = xx;
 			endY = yy;
 			if (startX == endX && startY == endY) {
-				std::cout << "drop out" << std::endl;
+				//std::cout << "drop out" << std::endl;
 				v.push_back(cv::Point{ xx, yy });
 
-				return v;
+				return v.size();
 			}
 			//std::cout << "right: " << xx <<" : " << yy << std::endl;
 		}
@@ -89,9 +96,10 @@ std::vector<cv::Point> feature::perimeterBlob(cv::Mat& img, int x, int y) {
 			//std::cout << "left : " << xx << " : " << yy << std::endl;
 		}
 	}
+	return v.size();
 }
 
-float feature::BlobCircularity(int BlobArea, int BlobPerimeter)
+float feature::BlobCircularity(int BlobArea, double BlobPerimeter)
 {
 	float Circularity = (4 * PI * BlobArea) / (BlobPerimeter * BlobPerimeter);
 	return Circularity;
