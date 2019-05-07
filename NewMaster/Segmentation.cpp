@@ -213,3 +213,16 @@ void Segmentation::Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure) 
 	Segmentation::Dilate(Input, Temp, Structure);
 	Segmentation::Erode(Temp, Output, Structure);
 }
+
+cv::Mat Segmentation::Cropping(cv::Mat& Input, int size)
+{
+	cv::Mat Cropped = cv::Mat((Input.rows - size*2), (Input.cols - size*2), CV_8UC1); //Creates a new image in the size of the cropped
+
+	for (int y = 0; y < Cropped.cols; y++) {
+		for (int x = 0; x < Cropped.rows; x++) {
+			Cropped.at<uchar>(x , y) = Input.at<uchar>(x+size, y+size); //Inputs the new pixel value into the cropped image
+		}
+	}
+
+	return Cropped;
+}

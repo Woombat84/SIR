@@ -15,6 +15,6 @@ public:
 	void Dilate(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure);//Dilate  Input to a new Output using the struturing element
 	void Opening(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure);//Performs an opening operation to Input in the Ouput matrix with Struturing element
 	void Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure);//Performs a closing operation to Input in the Ouput matrix with Struturing element
-
+	cv::Mat Cropping(cv::Mat& Input, int size); //Crops the input image to remove the border of size - Should be same size as largest kernel used previously
 };
 
