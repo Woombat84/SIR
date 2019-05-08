@@ -11,7 +11,9 @@ public:// methodes
 	~feature();
 	
 	
-	int perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width);//blob vector , height and width of image
+
+
+	int perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point> v);//blob vector , height and width of image, a vector to hold perimeter
 
 	float BlobCircularity(int BlobArea, double BlobPerimeter);	// area of the blob and the perimeter of the blob
 
@@ -24,6 +26,7 @@ public:// methodes
 
 	float compactness(std::vector<cv::Point> v, int area);//perimeter vector , area
 
+	int area(std::vector<cv::Point>);//vector of BoundingBox
 
 
 

@@ -24,7 +24,7 @@ feature::~feature()
 % Return : nothing.
 %
 */
-int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width) {
+int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point> v) {
 
 	//Create the BLOB in a new Matrix
 	cv::Mat img = cv::Mat::zeros(Height, Width, CV_8UC1);
@@ -33,7 +33,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width) {
 		img.at<uchar>(BLOB[i].y, BLOB[i].x) = 255;
 	}
 	
-	std::vector<cv::Point> v;
+	v.clear;
 	bool end = false;
 	int startX = BLOB[0].x;
 	int startY = BLOB[0].y;
@@ -311,5 +311,10 @@ float feature::HeightWitdh(std::vector<cv::Point> v) {
 }
 
 float feature::compactness(std::vector<cv::Point> v, int area) {
-	return(area/( (v[1].y - v[0].y) * (v[1].x - v[0].x)))
+	return(area / ((v[1].y - v[0].y) * (v[1].x - v[0].x)));
+}
+
+int feature::area(std::vector<cv::Point> v)
+{
+	return (v[1].y - v[0].y) * (v[1].x - v[0].x);
 }
