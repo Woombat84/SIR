@@ -741,7 +741,17 @@ std::vector<cv::Point> prossecing::perimeterVec() {
 	
 
 }
-float prossecing::percent(int old_value,int count, int V) {
+float prossecing::percent(cv::Mat img, int V) {
+
+	int old_value = 0 ;
+	int count = 0 ;
+
+	for (int y = 0; y < img.rows; y++) {
+		for (int x = 0; x < img.cols; x++) {
+			 old_value =+ img.at<uchar>(y, x);
+
+		}
+	}
 
 	float percent = (old_value / count) * V;
 

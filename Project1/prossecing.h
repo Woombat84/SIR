@@ -33,7 +33,9 @@ public:  //Methodes
 
 	std::vector<cv::Point> perimeterVec();
 
-	float percent(int old_value, int count, int V);
+	float percent(cv::Mat img, int V);
+
+
 
 
 

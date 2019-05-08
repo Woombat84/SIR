@@ -27,10 +27,22 @@
     <ClCompile Include="Features.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Morphology.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Morphology.cpp">
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Pre_prossecing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Segmentation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Blob_extration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="feature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,6 +60,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Morphology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pre_prossecing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Segmentation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Blob_extration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="feature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -126,19 +126,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blob_extration.cpp" />
+    <ClCompile Include="feature.cpp" />
     <ClCompile Include="Features.cpp" />
     <ClCompile Include="IMUData.cpp" />
     <ClCompile Include="Knn.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Morphology.cpp" />
+    <ClCompile Include="Pre_prossecing.cpp" />
     <ClCompile Include="prossecing.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Segmentation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blob_extration.h" />
+    <ClInclude Include="feature.h" />
     <ClInclude Include="Features.h" />
     <ClInclude Include="IMUData.h" />
     <ClInclude Include="Knn.h" />
     <ClInclude Include="Morphology.h" />
+    <ClInclude Include="Pre_prossecing.h" />
     <ClInclude Include="prossecing.h" />
+    <ClInclude Include="Segmentation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
