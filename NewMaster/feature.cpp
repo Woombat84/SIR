@@ -268,5 +268,42 @@ float feature::BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width
 	return Radius;
 }
 
+std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
+	int min_X = 10000;
+	int max_X = 0;
+	int min_Y = 100000;
+	int max_Y = 0;
+	
 
+	std::vector < cv::Point > v;
+	for (int i=0 ; i < perimeter.size(); i++){
+		//x less than min_x set x y
+		if (perimeter[i].x < min_X) {
+			min_X = perimeter[i].x;
+		}
+		//x more than max_x set x y
+		if (perimeter[i].x > max_X) {
+
+			max_X = perimeter[i].x;
+		}
+		//y less than max_x set x y
+		if (perimeter[i].x > min_Y) {
+			
+			min_Y = perimeter[i].y;
+		}
+		//y more than max_y set x y
+		if (perimeter[i].y > max_Y) {
+
+			max_Y = perimeter[i].y;
+  		}
+
+	}
+	v[0].x = min_X;
+	v[0].y = min_Y;
+	v[1].x = max_X;
+	v[1].y = max_Y;
+	return v;
+}
+
+float fea()
 

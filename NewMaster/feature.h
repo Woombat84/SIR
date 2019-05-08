@@ -3,7 +3,7 @@
 #include <opencv2\highgui.hpp>
 #include <opencv2\imgproc.hpp>
 #include <iostream>
-
+#include <vector>
 class feature
 {
 public:// methodes
@@ -16,6 +16,8 @@ public:// methodes
 	float BlobCircularity(int BlobArea, double BlobPerimeter);
 
 	float BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width);
+
+	std::vector<cv::Point> BoundingBox(std::vector<cv::Point> perimeter);
 
 
 
