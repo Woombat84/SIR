@@ -304,6 +304,12 @@ std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
 	v[1].y = max_Y;
 	return v;
 }
+float feature::HeightWitdh(std::vector<cv::Point> v) {
+	
+	return ((v[1].y - v[0].y) / (v[1].x - v[0].x));
 
-float fea()
+}
 
+float feature::compactness(std::vector<cv::Point> v, int area) {
+	return(area/( (v[1].y - v[0].y) * (v[1].x - v[0].x)))
+}
