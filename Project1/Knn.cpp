@@ -55,14 +55,13 @@ std::vector<float> rob_normalize(const std::vector<T> & A)
 	return AB;
 }
 
-void Knn::heapify(std::vector<float>& myVector, std::vector<int>& clInd, int n, int i) {
+void Knn::heapify(std::vector<float>& myVector, std::vector<std::string>& classes, int n, int i) {
 	int biggest = i;
 	int l = 2 * i + 1;
 	int r = 2 * i + 2;
-	//if left is larger than root
 	if (l < n && myVector[l] > myVector[biggest])
 		biggest = l;
-	//if right is larger than root
+
 	if (r < n && myVector[r] > myVector[biggest])
 		biggest = r;
 
@@ -70,30 +69,33 @@ void Knn::heapify(std::vector<float>& myVector, std::vector<int>& clInd, int n, 
 	if (biggest != i)
 	{
 		std::swap(myVector[i], myVector[biggest]);
-		std::swap(clInd[i], clInd[biggest]);
+
+		std::swap(classes[i], classes[biggest]);
 
 		// Recursively heapify the affected sub-tree 
-		heapify(myVector, clInd, n, biggest);
+		heapify(myVector, classes, n, biggest);
 	}
 }
 
-void Knn::heapSort(std::vector<float>& myVector, std::vector<int>& clInd)
+void Knn::heapSort(std::vector<float>& myVector, std::vector<std::string>& classes)
 {
 	// Build heap (rearrange array) 
 	int n = myVector.size();
 	for (int i = n / 2 - 1; i >= 0; i--)
-		heapify(myVector, clInd, n, i);
+		heapify(myVector, classes, n, i);
 
 	// One by one extract an element from heap 
 	for (int i = n - 1; i >= 0; i--)
 	{
 		// Move current root to end
 		std::swap(myVector[0], myVector[i]);
-		std::swap(clInd[0], clInd[i]);
+		std::swap(classes[0], classes[i]);
 
 		// call max heapify on the reduced heap 
-		heapify(myVector, clInd, i, 0);
+		heapify(myVector, classes, i, 0);
 	}
+
+
 }
 
 int Knn::string_pos(std::vector<std::string> myVector, std::string myString) {
@@ -103,21 +105,49 @@ int Knn::string_pos(std::vector<std::string> myVector, std::string myString) {
 	return -1;
 }
 
+
+std::vector<std::vector<float>> Knn::rob_normaliseAll(std::vector<std::vector<float>> trainingData) {
+	std::vector < std::vector<float>> result;
+	std::vector<std::vector<float>> normalised;
+	for (int i = 0; i < trainingData[0].size(); i++)
+	{
+		std::vector<float> featureVector;
+		featureVector.clear();
+		for (int j = 0; j < trainingData.size(); j++)
+			featureVector.push_back(trainingData[j][i]);
+
+		featureVector = rob_normalize(featureVector);
+		result.push_back(featureVector);
+	}
+
+	for (int i = 0; i < result[0].size(); i++) {
+		std::vector<float> instanceVector;
+		for (int j = 0; j < result.size(); j++)
+			instanceVector.push_back(result[j][i]);
+		normalised.push_back(instanceVector);
+
+	}
+
+	return normalised;
+}
+
 std::string Knn::rob_knn(std::vector<float> testVector, std::vector<std::vector<float>> trainingData, std::vector<std::string> classes, int k) {
 	std::vector<float> results;
-	std::vector<int> classIndex;
+	std::vector<std::string> classCopy;
+	classCopy = classes;
 
 	//puts in a vector all the distances between test Vector and training Data
-	for (int i = 0; i < trainingData.size(); i++) {
+	for (int i = 0; i < trainingData.size(); i++)
 		results.push_back(testVector >> trainingData[i]);
-		classIndex.push_back(i);
-	}
+
+
 	//sorting the results, the same changes are did in classIndex
-	heapSort(results, classIndex);
+	heapSort(results, classCopy);
+
 	std::vector<std::string> finalClasses;
-	//getting the k classes from the sorted class Index, using it as index
+	//getting the k classes from the sorted classCopy
 	for (int i = 0; i < k; i++)
-		finalClasses.push_back(classes[classIndex[i]]);
+		finalClasses.push_back(classCopy[i]);
 
 	std::vector<int> countVector;
 	std::vector<std::string> difClass;

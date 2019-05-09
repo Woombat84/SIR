@@ -9,9 +9,10 @@ public: // methodes
 
 
 private: // methodes
-	void heapify(std::vector<float>& myVector, std::vector<int>& clInd, int n, int i);
-	void heapSort(std::vector<float>& myVector, std::vector<int>& clInd);
+	void heapify(std::vector<float>& myVector, std::vector<std::string>& classes, int n, int i);
+	void heapSort(std::vector<float>& myVector, std::vector<std::string>& classes);
 	int string_pos(std::vector<std::string> myVector, std::string myString);
+	std::vector<std::vector<float>> rob_normaliseAll(std::vector<std::vector<float>> trainingData);
 
 public:  // members
 

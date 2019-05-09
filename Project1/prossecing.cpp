@@ -200,6 +200,7 @@ cv::Mat prossecing::rob_bluring(cv::Mat img, int k, int type = 1)
 			for (int j = k / 2; j < img.cols - (k / 2); j++)
 			{
 				int s = 0;
+				nrOfEl = 0;
 				for (int ii = -k / 2; ii <= k / 2; ii++)
 					for (int jj = -k / 2; jj <= k / 2; jj++)
 						//checks if the Point{i+ii,j+ii} is in the radius of the middle point Point{i,j}
