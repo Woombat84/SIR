@@ -13,7 +13,7 @@ public:// methodes
 	
 
 
-	int perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point> v);//blob vector , height and width of image, a vector to hold perimeter
+	int perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point>& v);//blob vector , height and width of image, a vector to hold perimeter
 
 	float BlobCircularity(int BlobArea, double BlobPerimeter);	// area of the blob and the perimeter of the blob
 

@@ -24,7 +24,7 @@ feature::~feature()
 % Return : nothing.
 %
 */
-int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point> v) {
+int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, std::vector<cv::Point> &v) {
 
 	//Create the BLOB in a new Matrix
 	cv::Mat img = cv::Mat::zeros(Height, Width, CV_8UC1);
@@ -33,7 +33,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 		img.at<uchar>(BLOB[i].y, BLOB[i].x) = 255;
 	}
 	
-	v.clear;
+	
 	bool end = false;
 	int startX = BLOB[0].x;
 	int startY = BLOB[0].y;
@@ -269,15 +269,16 @@ float feature::BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width
 }
 
 std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
-	int min_X = 10000;
-	int max_X = 0;
-	int min_Y = 100000;
-	int max_Y = 0;
+	auto min_X = 10000;
+	auto max_X = 0;
+	auto min_Y = 100000;
+	auto max_Y = 0;
 	
 
 	std::vector < cv::Point > v;
 	for (int i=0 ; i < perimeter.size(); i++){
 		//x less than min_x set x y
+	
 		if (perimeter[i].x < min_X) {
 			min_X = perimeter[i].x;
 		}
@@ -298,10 +299,9 @@ std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
   		}
 
 	}
-	v[0].x = min_X;
-	v[0].y = min_Y;
-	v[1].x = max_X;
-	v[1].y = max_Y;
+	
+	v.push_back(cv::Point{min_X, min_Y});
+	v.push_back(cv::Point{ max_X, max_Y });
 	return v;
 }
 float feature::HeightWitdh(std::vector<cv::Point> v) {
