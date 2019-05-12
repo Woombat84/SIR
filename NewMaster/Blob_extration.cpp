@@ -49,67 +49,34 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 	for (int y = 0; y < blobdet.rows; y++) {
 		for (int x = 0; x < blobdet.cols; x++) {
 			blobdet.at<uchar>(y, x) = img.at<uchar>(y, x);
-
 		}
 	}
-	/*
-	//Declaring a new image to find the egde"perimetor" of the blob
-	cv::Mat primdet = cv::Mat(img.rows, img.cols, CV_8UC1);
-	for (int y = 0; y < primdet.rows; y++) {
-		for (int x = 0; x < primdet.cols; x++) {
-			primdet.at<uchar>(y, x) = img.at<uchar>(y, x);
 
-		}
-	}
-	*/
 	// variabel to use in debugging for how many blobs in the frame
 	int counterVec = 0;
-
 	//Looking for the first whit pixel in the frame
 	for (int y = 0; y < blobdet.rows; y++) {
 		for (int x = 0; x < blobdet.cols; x++) {
 			if (blobdet.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
 			else {
-
 				int yy = y;
 				int xx = x;
-				//std::cout <<"in"<< std::endl;
-
 				//getting a blob in vector form
 				blobRecursiv(blobdet, x, y);
-				//pusing the blob vector of one blob in to a into a holding vector
-				//If the area of the blob is larger than x store the vector
-				//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
-
+				//pushing the blob vector of one blob in to a into a holding vector
+				//If the area of the blob is larger than MinBlobSize store the vector
 				if (blob_vector.size() > MinBlobSize) {
 					//std::cout <<  blob_vector[0] << std::endl;
 					Blobs_detected.push_back(blob_vector);
-					
-					std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
-					
+					//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
 				}
-				// debugging
-
 				counterVec++;
-				//std::cout << perimeterVector[0] << std::endl;
-				//std::cout << perimeterVector[perimeterVector.size()-1] << std::endl;
-
 				//clearing the inner vector of blob and the perimetor to reuse it
 				blob_vector.clear();
-				//getting a perimetor of a blob in the form of a vector
-					//pusing the perimetor vector of one blob in to a into a holding vector
-					//Perimetor.push_back(perimeterVector);
-					//std::cout << "perimitor vector size of number " << counterVec << ": " << perimeterVector.size() << std::endl;
-				//perimeterVector = perimeterBlob(primdet, blob_vector[0].x, blob_vector[0].y);
-				//perimeterVector.clear();
-
 			}
 
 		}
-
 	}
-
-	//std::cout << "done" << std::endl;
 	return Blobs_detected;
 }
 
