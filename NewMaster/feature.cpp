@@ -267,7 +267,17 @@ float feature::BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width
 
 	return Radius;
 }
-
+/*
+% Function :  boundary box.
+%
+% Description : This function finds a boundary box based on a perimeter.
+%
+%
+% Parameters : A vector of points of a perimeter.
+%
+% Return : A vector of points of top left and bottoum rigth.
+%
+*/
 std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
 	auto min_X = 10000;
 	auto max_X = 0;
@@ -278,30 +288,19 @@ std::vector<cv::Point> feature::BoundingBox(std::vector<cv::Point> perimeter) {
 	std::vector < cv::Point > v;
 	for (int i=0 ; i < perimeter.size(); i++){
 		//x less than min_x set x y
-	
-		if (perimeter[i].x < min_X) {
-			min_X = perimeter[i].x;
-		}
+		if (perimeter[i].x < min_X) min_X = perimeter[i].x;
 		//x more than max_x set x y
-		if (perimeter[i].x > max_X) {
-
-			max_X = perimeter[i].x;
-		}
+		if (perimeter[i].x > max_X) max_X = perimeter[i].x;
 		//y less than max_x set x y
-		if (perimeter[i].x > min_Y) {
-			
-			min_Y = perimeter[i].y;
-		}
+		if (perimeter[i].x > min_Y) min_Y = perimeter[i].y;
 		//y more than max_y set x y
-		if (perimeter[i].y > max_Y) {
-
-			max_Y = perimeter[i].y;
-  		}
-
+		if (perimeter[i].y > max_Y) max_Y = perimeter[i].y; 
 	}
-	
+	// push top left corner coordinate
 	v.push_back(cv::Point{min_X, min_Y});
-	v.push_back(cv::Point{ max_X, max_Y });
+	// push bottum left corner coordinate
+	v.push_back(cv::Point{max_X, max_Y});
+
 	return v;
 }
 float feature::HeightWitdh(std::vector<cv::Point> v) {
@@ -309,11 +308,31 @@ float feature::HeightWitdh(std::vector<cv::Point> v) {
 	return ((v[1].y - v[0].y) / (v[1].x - v[0].x));
 
 }
-
+/*
+% Function : Compactness.
+%
+% Description : This function finds compactness of a square
+%
+%
+% Parameters : A vector of points of top left and bottoum rigth and an area.
+%
+% Return : Compactness
+%
+*/
 float feature::compactness(std::vector<cv::Point> v, int area) {
 	return(area / ((v[1].y - v[0].y) * (v[1].x - v[0].x)));
 }
-
+/*
+% Function : Area of the boundary box.
+%
+% Description : This function finds area of the boundary box
+%
+%
+% Parameters : A vector of points of top left and bottoum rigth.
+%
+% Return : Area of the boundary box
+%
+*/
 int feature::area(std::vector<cv::Point> v)
 {
 	return (v[1].y - v[0].y) * (v[1].x - v[0].x);
