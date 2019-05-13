@@ -1,11 +1,11 @@
 #pragma once
 
 struct BlobFeatures {
-	int area;
-	int perimeter;
+	float area;
+	float perimeter;
 	float circularity;
 	float boundingCircleRadius;
-	int boundingBoxArea;
+	float boundingBoxArea;
 	float heightWidthRatio;
 	float compactness;
 	int CoMX;
