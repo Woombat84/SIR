@@ -17,7 +17,7 @@ A cpp compiler as visual studio
 What works so far is a skeleton setup before any prossecing.\
 Depth, IR and RGB are displayed, the IMU data is printed to the console.
 
-![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/view.png "Working part")
+![alt text](https://github.com/Woombat84/SIR/blob/NewMaster/Picture/view.png "Working part")
 
 ## What needs to be done:
 Deteced faults.\
@@ -32,7 +32,7 @@ If you get and error regarding a path, do the following:
 
 3. Locate this:
 
-![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/predelete.png "note: their maybe a more path's with in this structur")
+![alt text](https://github.com/Woombat84/SIR/blob/NewMaster/Picture/predelete.png "note: their maybe a more path's with in this structur")
 
 4. Delete everhting between </ImportGroup> EXCEPT the two top lines.
 
@@ -40,6 +40,6 @@ If you get and error regarding a path, do the following:
 
 ⋅⋅⋅The end result should look like this:
 
-![alt text](https://github.com/Woombat84/SIR/blob/master/Picture/deleted.png "End result")
+![alt text](https://github.com/Woombat84/SIR/blob/NewMaster/Picture/deleted.png "End result")
 
 6. Add property sheets in visual studio for openCV and intel.realsense both can be located in the RealSense SDK libaery.  
