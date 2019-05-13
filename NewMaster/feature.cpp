@@ -107,11 +107,11 @@ float feature::BlobCircularity(int BlobArea, double BlobPerimeter)
 	return Circularity;
 }
 
-float feature::BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width)
+float feature::BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width, int xAvr, int yAvr)
 {
 	//Find the centre of the BLOB
-	int xAvr = 0;
-	int yAvr = 0;
+	xAvr = 0;
+	yAvr = 0;
 	for (int i = 0; i < BLOB.size(); i++) {
 		xAvr += BLOB[i].x;
 		yAvr += BLOB[i].y;
