@@ -2,7 +2,9 @@
 #include <opencv2\core.hpp>
 #include <opencv2\highgui.hpp>
 #include <opencv2\imgproc.hpp>
+#include <iterator> 
 #include <iostream>
+#include <fstream>
 class Segmentation
 {
 public:
@@ -16,5 +18,6 @@ public:
 	void Opening(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure);//Performs an opening operation to Input in the Ouput matrix with Struturing element
 	void Closing(cv::Mat& Input, cv::Mat& Output, cv::Mat& Structure);//Performs a closing operation to Input in the Ouput matrix with Struturing element
 	cv::Mat Cropping(cv::Mat& Input, int size); //Crops the input image to remove the border of size - Should be same size as largest kernel used previously
+	void storeArr(int arr[]);
 };
 

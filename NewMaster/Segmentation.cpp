@@ -15,18 +15,37 @@ Segmentation::~Segmentation()
 int Segmentation::percent(cv::Mat img, float V) {
 
 	const int HistSize = 256; //Size of histogram 
-	int histogram[HistSize] = { 0 }; //Initializing histogram to 0
+	int histogram[HistSize] = { }; //Initializing histogram to 0
 	bool check = true;	//bool used for ending loop when threshold is found
 	float accumulate = 0.0f; // Value for finding threshold
 	int pixels = img.rows*img.cols; //Amount of pixels in image
 	int thresh = 0; //Calculated threshold
+
+	
 
 	for (int x = 0; x < img.cols; x++) { 
 		for (int y = 0; y < img.rows; y++) {
 			histogram[img.at<uchar>(y, x)] += 1; //Add every pixel to the histogram
 		}
 	}
+
+	/* //Creating the histogram for later use
+	std::cout << sizeof(histogram) / sizeof(*histogram) << std::endl;
 	
+	std::fstream fs;
+	fs.open("hst.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+	//const int numArr = sizeof(arr) / sizeof(arr[0]); ;
+
+	for (int i = 0; i <= sizeof(histogram) / sizeof(*histogram); i++)
+	{
+		if ((sizeof(histogram) / sizeof(*histogram)) != i) fs << histogram[i] << ',';
+		else fs << histogram[i] << std::endl;
+
+	}
+
+	fs.close();
+	*/
+
 	for (; check && thresh<HistSize; thresh++) {
 		if (accumulate > 1.0 - V) { //Check if percentage has been found
 			check = false;			// if found end loop
@@ -36,6 +55,7 @@ int Segmentation::percent(cv::Mat img, float V) {
 		}
 	}
 
+	
 	return thresh;
 }
 
@@ -225,4 +245,22 @@ cv::Mat Segmentation::Cropping(cv::Mat& Input, int size)
 	}
 
 	return Cropped;
+}
+
+
+void Segmentation::storeArr(int arr[]) {
+	std::fstream fs;
+	fs.open("hst.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+	//const int numArr = sizeof(arr) / sizeof(arr[0]); ;
+	
+	for (int i = 0; i <= sizeof(arr); i++)
+	{
+		if (sizeof(arr) != i) fs << arr[i] << ',';
+		else fs << arr[i] << std::endl;
+
+	}
+
+	fs.close();
+	return;
+
 }
