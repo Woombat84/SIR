@@ -43,10 +43,10 @@ void Segmentation::Threshold(cv::Mat& img, int Threshold) {
 	for (int x = 0; x < img.cols; x++) {
 		for (int y = 0; y < img.rows; y++) {
 			if (img.at <uchar>(y, x) > Threshold) { //If value is above threshold make white
-				img.at<uchar>(y, x) = 255;
+				img.at<uchar>(y, x) = 0;
 			}
 			else {
-				img.at<uchar>(y, x) = 0; //Otherwise make pixel black
+				img.at<uchar>(y, x) =255; //Otherwise make pixel black
 			}
 		}
 	}
@@ -221,6 +221,9 @@ cv::Mat Segmentation::Cropping(cv::Mat& Input, int size)
 	for (int y = 0; y < Cropped.cols; y++) {
 		for (int x = 0; x < Cropped.rows; x++) {
 			Cropped.at<uchar>(x , y) = Input.at<uchar>(x+size, y+size); //Inputs the new pixel value into the cropped image
+			if (x == 0 || y == 0 || y == Cropped.cols-1 || x == Cropped.rows-1) {
+				Cropped.at<uchar>(x, y) = 0;
+			}
 		}
 	}
 

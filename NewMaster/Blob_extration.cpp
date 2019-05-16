@@ -57,10 +57,11 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 	//Looking for the first whit pixel in the frame
 	for (int y = 0; y < blobdet.rows; y++) {
 		for (int x = 0; x < blobdet.cols; x++) {
-			if (blobdet.at<int8_t>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
+			if (blobdet.at<uchar>(y, x) == BitValue) {} //std::cout<< "NOT: " << x << "," << y << std::endl; }
 			else {
 				int yy = y;
 				int xx = x;
+				//std::cout << "here" <<xx  << ',' << yy << std::endl;
 				//getting a blob in vector form
 				blobRecursiv(blobdet, x, y);
 				//pushing the blob vector of one blob in to a into a holding vector
@@ -97,12 +98,16 @@ void Blob_extration::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 	if (blobNew.at<uchar>(y, x) != 0) {
 		blobNew.at<uchar>(y, x) = 0;
 		//Storing the point in a a vector.
+		//std::cout << "burning" << std::endl;
 		blob_vector.push_back(cv::Point{ x, y });
 	}
+	
 	while (noPixLeft == false) {
+		
 		//When the max number of recusive function are reached the x,y coordinate has to be stored
 		//A holder is set to true to itorate back througe the functions
 		if (counterBlob >= maxCounterBlob) {
+			//std::cout << "here" << std::endl;
 			countX = x;
 			countY = y;
 			counterBlob--;
@@ -122,28 +127,28 @@ void Blob_extration::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 		}
 		//Looking at the arms in this order: right,up, left, down.
 		//Looking right
-		if (blobNew.at<uchar>(y, x + 1) > BitValue && maxCounter == false) {
-			//std::cout << "Looking left: " << x - 1 << " , " << y << std::endl;
+		if (blobNew.at<uchar>(y, x + 1) > BitValue && maxCounter == false  ) {
+			//std::cout << "Looking rigth: " << x - 1 << " , " << y << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
 			blobRecursiv(blobNew, x + 1, y);
 		}
 		//Looking up
-		if (blobNew.at<uchar>(y - 1, x) > BitValue && maxCounter == false) {
+		if (blobNew.at<uchar>(y - 1, x) > BitValue && maxCounter == false  ) {
 			//std::cout << "Looking up: " << x << " , " << y - 1 << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
 			blobRecursiv(blobNew, x, y - 1);
 		}
 		//Looking left
-		if (blobNew.at<uchar>(y, x - 1) > BitValue && maxCounter == false) {
-			//std::cout << "Looking r" << x + 1 << " , " << y << std::endl;
+		if (blobNew.at<uchar>(y, x - 1) > BitValue && maxCounter == false  ) {
+			//std::cout << "Looking left: " << x + 1 << " , " << y << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
 			blobRecursiv(blobNew, x - 1, y);
 		}
 		//Looking down
-		if (blobNew.at<uchar>(y + 1, x) > BitValue && maxCounter == false) {
+		if ( blobNew.at<uchar>(y + 1, x) > BitValue && maxCounter == false ) {
 			//std::cout << "Looking down: " << x << " , " << y + 1 << std::endl;
 			counterBlob++;
 			//std::cout << counterBlob << std::endl;
@@ -155,3 +160,4 @@ void Blob_extration::blobRecursiv(cv::Mat& blobNew, int x, int y) {
 		}
 	}
 }
+ 
