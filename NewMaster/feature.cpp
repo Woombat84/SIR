@@ -32,8 +32,8 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 	for (int i = 0; i < BLOB.size(); i++) {
 		img.at<uchar>(BLOB[i].y, BLOB[i].x) = 255;
 	}
-	
-	
+	//cv::imshow("start", img);
+	//std::cout << "here"<< std::endl;
 	bool end = false;
 	int startX = BLOB[0].x;
 	int startY = BLOB[0].y;
@@ -56,7 +56,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 			//std::cout << "up x : "<< endX << "  Y: "<< endY<< std::endl;
 			//std::cout << "en x : " << startX << "  Y: " << startY << std::endl;
 			if (startX == endX && startY+1 == endY) {
-				std::cout << "drop out" << std::endl;
+				//std::cout << "drop out" << std::endl;
 				v.push_back(cv::Point{ xx, yy });
 				//std::cout << "up: " << xx << " : " << yy <<" last stand"<< std::endl;
 				
@@ -97,6 +97,67 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 			endY = yy;
 			//std::cout << "left : " << xx << " : " << yy << std::endl;
 		}
+		else
+		{
+			//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be black and the top right have to be white
+			if (img.at<uchar>(yy, xx - 1) == 0 && img.at<uchar>(yy - 1, xx) == 0 && img.at<uchar>(yy - 1, xx+1) == 255) {
+				img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+				v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
+				yy--; //moving up in the image
+				xx++;
+				endX = xx;
+				endY = yy;
+				//std::cout << "up   : " << xx << " : " << yy <<  std::endl;
+				//std::cout << "up x : "<< endX << "  Y: "<< endY<< std::endl;
+				//std::cout << "en x : " << startX << "  Y: " << startY << std::endl;
+				if (startX == endX && startY + 1 == endY) {
+					//std::cout << "drop out" << std::endl;
+					v.push_back(cv::Point{ xx, yy });
+					//std::cout << "up _right: " << xx << " : " << yy <<" last stand"<< std::endl;
+
+					return v.size();
+				}
+				//std::cout << "up_right: " << xx << " : " << yy << std::endl;
+			}
+			//Looking right, in a 9 x9 squrea top right pixel have to be black and the middel right have to be black and bottum right have to wihte
+			else if (img.at<uchar>(yy - 1, xx) == 0 && img.at<uchar>(yy, xx + 1) == 0  && img.at<uchar>(yy + 1, xx + 1) == 255) {
+				img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+				v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
+				xx++; //moving right in the image
+				yy++;
+				endX = xx;
+				endY = yy;
+				if (startX == endX && startY + 1 == endY) {
+					std::cout << "drop out" << std::endl;
+					std::cout << "down_right: " << xx << " : " << yy << " last stand" << std::endl;
+					return v.size();
+				}
+				//std::cout << "down_right: " << xx <<" : " << yy << std::endl;
+			}
+			//Looking down, in a 9 x9 squrea bottum right pixel have to be black and the bottum middel have to be black
+			else if (img.at<uchar>(yy, xx + 1) == 0 && img.at<uchar>(yy + 1, xx) == 0 && img.at<uchar>(yy + 1, xx - 1) == 255) {
+				img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+				v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
+				yy++;	//moving down in the image
+				xx--;
+				endX = xx;
+				endY = yy;
+				//std::cout << "left_down : " << xx << " : " << yy << std::endl;
+			}
+			//Looking left, in a 9 x9 squrea bottum left pixel have to be black and the middel left have to be white
+			else if (img.at<uchar>(yy + 1, xx) == 0 && img.at<uchar>(yy, xx - 1) == 0 && img.at<uchar>(yy -1, xx -1 ) == 255) {
+				img.at<uchar>(yy, xx) = 0;// "burning" the pixel
+				v.push_back(cv::Point{ xx, yy }); // storing the points in the vector "v"
+				xx--;	//moving left in the image
+				yy--;
+				endX = xx;
+				endY = yy;
+				//std::cout << "top_left : " << xx << " : " << yy << std::endl;
+				
+			}	
+			//cv::imshow("end", img);
+			//cv::waitKey(1);
+		}	
 	}
 	return v.size();
 }
