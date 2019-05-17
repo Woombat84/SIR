@@ -66,7 +66,7 @@ std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 				blobRecursiv(blobdet, x, y);
 				//pushing the blob vector of one blob in to a into a holding vector
 				//If the area of the blob is larger than MinBlobSize store the vector
-				if (blob_vector.size() > MinBlobSize) {
+				if (blob_vector.size() > MinBlobSize && blob_vector.size() < MaxBlobSize) {
 					//std::cout <<  blob_vector[0] << std::endl;
 					Blobs_detected.push_back(blob_vector);
 					//std::cout << "blob vector size of number " << counterVec << ": " << blob_vector.size() << std::endl;
