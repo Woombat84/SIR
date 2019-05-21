@@ -75,8 +75,8 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				
 				show.at<uchar>(perimeter[t].y, perimeter[t].x) = 0;
 			}
-
-			cv::imshow("Training blob", show);
+			cv::namedWindow(Classifier,CV_WINDOW_AUTOSIZE);
+			cv::imshow(Classifier, show);
 			
 			//selecting of what to do whit the data
 			std::cout << "Traning data(1) or skip data(2)" << std::endl;
