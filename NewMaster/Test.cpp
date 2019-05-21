@@ -68,13 +68,19 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 
 			//drawing perimeter of what has to be trained
 			
-
+			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
+			for (int y = 0; y < show.rows; y++) {
+				for (int x = 0; x < show.cols; x++) {
+					show.at<uchar>(y, x) = img.at<uchar>(y, x);
+				}
+			}
 			for (int t = 0; t < perimeter.size() - 1; t++)
 			{
-				img.at<uchar>(perimeter[t].y, perimeter[t].x) = 125;
+				
+				show.at<uchar>(perimeter[t].y, perimeter[t].x) = 0;
 			}
 
-			cv::imshow("Training blob", img);
+			cv::imshow("Training blob", show);
 			cv::waitKey(1);
 			//selecting of what to do whit the data
 			std::cout << "Traning data(1) or skip data(2)" << std::endl;
