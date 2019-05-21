@@ -21,32 +21,28 @@ Test::~Test()
 }
 
 
-void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &Blobs)
+void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Point>> Blobs, std::string Classifier)
 {
 	
 		feature Feature;
 		
 		std::fstream fs;
 
-		std::string Classifier = "Class.txt";
-		
 		//Feature Extraction
-		std::vector<BlobFeatures> BLOBS;
+		//std::vector<BlobFeatures> BLOBS;
 		//std::cout << Blobs.size() << std::endl;
 		for (int i = 0; i < Blobs.size(); i++) {
-			
+			cv::destroyAllWindows();
 			//Create instance of struct
 			BlobFeatures Extract;
 
 			//Add area to struct
-			float are = static_cast<float>(Blobs[i].size());
-			Extract.area = 1. / (1. + are);
+			Extract.area = 1. / (1.0 + Blobs[i].size());
 
 			//Add perimeter to struct
 			std::vector<cv::Point> perimeter;
-			float per = Feature.perimeterBlob(Blobs[i], srcC.rows, srcC.cols, perimeter);
-			Extract.perimeter = 1 / (1 + per);
-
+			Extract.perimeter = 1 / (1.0 + Feature.perimeterBlob(Blobs[i], srcC.rows, srcC.cols, perimeter));
+			
 			//Bounding circle to struct
 			Extract.boundingCircleRadius = 1 / (1.0 + Feature.BoundingCircle(Blobs[i], srcC.rows, srcC.cols, Extract.CoMX, Extract.CoMY));
 
@@ -74,16 +70,17 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 					show.at<uchar>(y, x) = img.at<uchar>(y, x);
 				}
 			}
-			for (int t = 0; t < perimeter.size() - 1; t++)
+			for (int t = 0; t < perimeter.size(); t++)
 			{
 				
 				show.at<uchar>(perimeter[t].y, perimeter[t].x) = 0;
 			}
 
 			cv::imshow("Training blob", show);
-			cv::waitKey(1);
+			
 			//selecting of what to do whit the data
 			std::cout << "Traning data(1) or skip data(2)" << std::endl;
+			cv::waitKey(100);
 			int j = 0;
 			std::cin >> j;
 			if (j == 1) {
@@ -117,15 +114,15 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 					//storing the extracted features for a blob
 					fs.open(Classifier, std::fstream::in | std::fstream::out | std::fstream::app);
 
-					fs << Extract.area << ',' <<//notworking
-						Extract.perimeter << ',' <<//notworking
-						Extract.circularity << ',' <<//notworking
+					fs << Extract.area << ',' <<
+						Extract.perimeter << ',' <<
+						Extract.circularity << ',' <<
 						Extract.boundingCircleRadius << ',' <<
-						Extract.boundingBoxArea << ',' <<//notworking
+						Extract.boundingBoxArea << ',' <<
 						Extract.heightWidthRatio << ',' <<
 						Extract.compactness << ',' <<
-						Extract.CoMX << ',' <<//notworking
-						Extract.CoMY << ',' <<//notworking
+						Extract.CoMX << ',' <<
+						Extract.CoMY << ',' <<
 						Extract.label << std::endl;
 					fs.close();
 				}
@@ -150,11 +147,14 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 				}
 				else {}
 				// traning data save to file
-				cv::destroyAllWindows();
+				
 
 
 			}
 			else {}
+			
 		}
+		
+		cv::destroyAllWindows();
 return;
 }

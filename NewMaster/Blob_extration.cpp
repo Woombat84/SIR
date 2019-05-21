@@ -44,6 +44,7 @@ Blob_extration::~Blob_extration()
 */
 std::vector<std::vector<cv::Point>> Blob_extration::blob(cv::Mat img)
 {
+	Blobs_detected.clear();
 	//Declaring a new image to blob detection
 	cv::Mat blobdet = cv::Mat(img.rows, img.cols, CV_8UC1);
 	for (int y = 0; y < blobdet.rows; y++) {

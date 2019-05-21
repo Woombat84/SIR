@@ -42,9 +42,10 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 	int endX = 0;
 	int endY = 0;
 	v.push_back(cv::Point{ xx, yy });
+	
 	//std::cout << "start  : " << startX << " : " << startY << std::endl;
 	while (end == false) {
-
+		//std::cout << "here: " << xx << " " << yy << " " <<  std::endl;
 		//Looking up, in a 9 x9 squrea top left pixel have to be black and the top middel have to be white
 		if (img.at<uchar>(yy, xx - 1) == 0 && img.at<uchar>(yy - 1, xx) == 255) {
 			img.at<uchar>(yy, xx) = 0;// "burning" the pixel
@@ -71,6 +72,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 			xx++; //moving right in the image
 			endX = xx;
 			endY = yy;
+
 			if (startX == endX && startY+1 == endY) {
 				//std::cout << "drop out" << std::endl;
 				
@@ -110,7 +112,7 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 				//std::cout << "up   : " << xx << " : " << yy <<  std::endl;
 				//std::cout << "up x : "<< endX << "  Y: "<< endY<< std::endl;
 				//std::cout << "en x : " << startX << "  Y: " << startY << std::endl;
-				if (startX == endX && startY + 1 == endY) {
+				if (startX-1 == endX && startY + 1 == endY) {
 					//std::cout << "drop out" << std::endl;
 					v.push_back(cv::Point{ xx, yy });
 					//std::cout << "up _right: " << xx << " : " << yy <<" last stand"<< std::endl;
@@ -128,8 +130,8 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 				endX = xx;
 				endY = yy;
 				if (startX == endX && startY + 1 == endY) {
-					std::cout << "drop out" << std::endl;
-					std::cout << "down_right: " << xx << " : " << yy << " last stand" << std::endl;
+					//std::cout << "drop out" << std::endl;
+					//std::cout << "down_right: " << xx << " : " << yy << " last stand" << std::endl;
 					return v.size();
 				}
 				//std::cout << "down_right: " << xx <<" : " << yy << std::endl;
@@ -157,6 +159,9 @@ int feature::perimeterBlob(std::vector<cv::Point> BLOB, int Height, int Width, s
 			}	
 			//cv::imshow("end", img);
 			//cv::waitKey(1);
+			else {
+				return v.size();
+			}
 		}	
 	}
 	return v.size();
