@@ -40,22 +40,22 @@ int Segmentation::percent(cv::Mat img, float V) {
 }
 
 void Segmentation::Threshold(cv::Mat& img, int Threshold, int TopBot) {
-	if (TopBot = 0) {
+	if (TopBot == 0) {
 		for (int x = 0; x < img.cols; x++) {
 			for (int y = 0; y < img.rows; y++) {
-				if (img.at <uchar>(y, x) > Threshold) { //If value is above threshold make white
-					img.at<uchar>(y, x) = 0;
+				if (img.at <uchar>(y, x) > Threshold) { //If value is above threshold make black
+					img.at<uchar>(y, x) = 255;
 				}
 				else {
-					img.at<uchar>(y, x) = 255; //Otherwise make pixel black
+					img.at<uchar>(y, x) = 0; //Otherwise make pixel white
 				}
 			}
 		}
 	}
-	else if (TopBot = 1) {
+	else if (TopBot == 1) {
 		for (int x = 0; x < img.cols; x++) {
 			for (int y = 0; y < img.rows; y++) {
-				if (img.at <uchar>(y, x) > Threshold) { //If value is above threshold make white
+				if (img.at <uchar>(y, x) < Threshold) { //If value is above threshold make white
 					img.at<uchar>(y, x) = 255;
 				}
 				else {
