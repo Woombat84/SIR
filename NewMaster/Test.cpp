@@ -29,8 +29,6 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 		std::fstream fs;
 
 		//Feature Extraction
-		//std::vector<BlobFeatures> BLOBS;
-		//std::cout << Blobs.size() << std::endl;
 		for (int i = 0; i < Blobs.size(); i++) {
 			cv::destroyAllWindows();
 			//Create instance of struct
@@ -63,7 +61,6 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
 			//drawing perimeter of what has to be trained
-			
 			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
 			for (int y = 0; y < show.rows; y++) {
 				for (int x = 0; x < show.cols; x++) {
@@ -146,7 +143,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 
 				}
 				else {}
-				// traning data save to file
+				
 				
 
 
