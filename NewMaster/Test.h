@@ -14,7 +14,7 @@ public:
 	Test();
 	~Test();
 
-	void run(cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> Blobs);
+	void run(cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>>& Blobs);
 
 
 };

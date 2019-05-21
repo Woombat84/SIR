@@ -21,15 +21,20 @@ Test::~Test()
 }
 
 
-void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> Blobs)
+void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &Blobs)
 {
+	
 		feature Feature;
+		
 		std::fstream fs;
+
 		std::string Classifier = "Class.txt";
+		
 		//Feature Extraction
 		std::vector<BlobFeatures> BLOBS;
-
+		//std::cout << Blobs.size() << std::endl;
 		for (int i = 0; i < Blobs.size(); i++) {
+			
 			//Create instance of struct
 			BlobFeatures Extract;
 
@@ -62,7 +67,7 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> B
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
 			//drawing perimeter of what has to be trained
-
+			
 
 			for (int t = 0; t < perimeter.size() - 1; t++)
 			{
