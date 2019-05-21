@@ -44,11 +44,11 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 
 			//Add perimeter to struct
 			std::vector<cv::Point> perimeter;
-			float per = Feature.perimeterBlob(Blobs[i], img.rows, img.cols, perimeter);
+			float per = Feature.perimeterBlob(Blobs[i], srcC.rows, srcC.cols, perimeter);
 			Extract.perimeter = 1 / (1 + per);
 
 			//Bounding circle to struct
-			Extract.boundingCircleRadius = 1 / (1.0 + Feature.BoundingCircle(Blobs[i], img.rows, img.cols, Extract.CoMX, Extract.CoMY));
+			Extract.boundingCircleRadius = 1 / (1.0 + Feature.BoundingCircle(Blobs[i], srcC.rows, srcC.cols, Extract.CoMX, Extract.CoMY));
 
 			//Add circularity to struct
 			Extract.circularity = 1 / (1.0 + Feature.BlobCircularity(Extract.area, Extract.perimeter));
@@ -71,10 +71,10 @@ void Test::run( cv::Mat img, cv::Mat srcC, std::vector<std::vector<cv::Point>> &
 
 			for (int t = 0; t < perimeter.size() - 1; t++)
 			{
-				srcC.at<uchar>(perimeter[t].y, perimeter[t].x) = 255;
+				img.at<uchar>(perimeter[t].y, perimeter[t].x) = 125;
 			}
 
-			cv::imshow("Training blob", srcC);
+			cv::imshow("Training blob", img);
 			cv::waitKey(1);
 			//selecting of what to do whit the data
 			std::cout << "Traning data(1) or skip data(2)" << std::endl;
