@@ -124,8 +124,15 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 					fs.close();
 				}
 				if (k == 2) {
-					std::cout << "No fault" << std::endl;
-					Extract.label = "No_fault";
+					std::cout << "No fault,label Noise(1) Centerpipe(2)" << std::endl;
+					int h=0;
+					std::cin >> h;
+					if(h==1){
+					Extract.label = "Noise";
+					}
+					if (h==2) {
+						Extract.label = "Centerpipe";
+					}
 					//storing the extracted features for a blob
 					fs.open(Classifier, std::fstream::in | std::fstream::out | std::fstream::app);
 
