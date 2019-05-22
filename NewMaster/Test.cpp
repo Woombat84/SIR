@@ -130,7 +130,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 					if(h==1){
 					Extract.label = "Noise";
 					}
-					if (h==2) {
+					if(h==2){
 						Extract.label = "Centerpipe";
 					}
 					//storing the extracted features for a blob
