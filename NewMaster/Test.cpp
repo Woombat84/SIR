@@ -4,11 +4,15 @@
 #include <opencv2\imgproc.hpp>
 #include <iterator> 
 #include <iostream>
+#include <istream>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <string>
 #include "BlobFeatures.h"
 #include "feature.h"
-
+#include <algorithm>
+#include <map>
 Test::Test()
 {
 	
@@ -21,13 +25,13 @@ Test::~Test()
 }
 
 
-void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Point>> Blobs, std::string Classifier)
+void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Point>> Blobs, std::string Classifier, std::vector<BlobFeatures>vector)
 {
 	
 		feature Feature;
 		
 		std::fstream fs;
-
+		std::vector<BlobFeatures> Bf;
 		//Feature Extraction
 		for (int i = 0; i < Blobs.size(); i++) {
 			cv::destroyAllWindows();
@@ -76,7 +80,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			cv::imshow(Classifier, show);
 			
 			//selecting of what to do whit the data
-			std::cout << "Traning data(1) or skip data(2)" << std::endl;
+			std::cout << "Traning data(1), skip data(2) or Test data(3)" << std::endl;
 			cv::waitKey(100);
 			int j = 0;
 			std::cin >> j;
@@ -147,18 +151,164 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 						Extract.CoMY << ',' <<
 						Extract.label << std::endl;
 						fs.close();
-
 				}
 				else {}
-				
-				
-
-
 			}
-			else {}
-			
+			if (j==3) {
+				std::string faultLable = DistanceCalc(vector, Extract);
+				std::cout << faultLable << std::endl;
+				cv::waitKey(1000);
+			}
+			else {}	
 		}
-		
 		cv::destroyAllWindows();
 return;
 }
+
+std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures feat){
+
+	DistFeatures f;
+	std::vector<DistFeatures> v;
+	for (int i = 0; i < vector.size() ; i++) {
+		
+		f.dist=sqrt((feat.area - vector[i].area) * (feat.area - vector[i].area)
+			+ (feat.perimeter - vector[i].perimeter) * (feat.perimeter - vector[i].perimeter)
+			+ (feat.circularity - vector[i].circularity) * (feat.circularity - vector[i].circularity)
+			+ (feat.boundingCircleRadius - vector[i].boundingCircleRadius) * (feat.boundingCircleRadius - vector[i].boundingCircleRadius)
+			+ (feat.boundingBoxArea - vector[i].boundingBoxArea) * (feat.boundingBoxArea - vector[i].boundingBoxArea)
+			+ (feat.heightWidthRatio - vector[i].heightWidthRatio) * (feat.heightWidthRatio - vector[i].heightWidthRatio)
+			+ (feat.compactness - vector[i].compactness) * (feat.compactness - vector[i].compactness)
+			+ (feat.CoMX - vector[i].CoMX) * (feat.CoMX - vector[i].CoMX)
+			+ (feat.CoMY - vector[i].CoMY) * (feat.CoMY - vector[i].CoMY));
+			f.label = vector[i].label;
+		v.push_back(f);
+	}
+	//Sort distances
+	std::sort(v.begin(), v.end(), [](const DistFeatures & d1, const DistFeatures & d2) { return d1.dist < d2.dist; });
+	//finding K nearset neibourg
+	std::string lable = knearest(v);
+
+	return lable;
+}
+
+void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures> &obsVec) {
+
+	std::ifstream pipeslist("pipes.txt");
+	
+		if (!pipeslist)
+		{
+				std::cout << "File can't be opened! " << std::endl;
+				system("PAUSE");
+		}
+
+	BlobFeatures pipes;
+	std::string s="";
+	while (getline(pipeslist,s, ',')) {
+		pipes.area = stof(s);
+		getline(pipeslist,s , ',');
+		pipes.perimeter = stof(s);
+		getline(pipeslist,s , ',');
+		pipes.circularity = stof(s);
+		getline(pipeslist,s, ',');
+		pipes.boundingCircleRadius = stof(s);
+		getline(pipeslist, s, ',');
+		pipes.boundingBoxArea = stof(s);
+		getline(pipeslist,s, ',');
+		pipes.heightWidthRatio = stof(s);
+		getline(pipeslist,s, ',');
+		pipes.compactness = stof(s);
+		getline(pipeslist,s, ',');
+		pipes.CoMX = stoi(s);
+		getline(pipeslist,s , ',');
+		pipes.CoMY = stoi(s);
+		getline(pipeslist,pipes.label, '\n');
+		pipeVec.push_back(pipes);
+		
+	}
+	
+	pipeslist.close();
+	
+	
+	std::ifstream obslist("obstacles.txt");
+	BlobFeatures obstacles;
+		if (!obslist)
+		{
+				std::cout << "File can't be opened! " << std::endl;
+				system("PAUSE");
+		}
+	
+	while (getline(obslist,s ,','))
+	{
+			obstacles.area = stof(s);
+			getline(obslist, s, ',');
+			obstacles.perimeter = stof(s);
+			getline(obslist, s, ',');
+			obstacles.circularity = stof(s);
+			getline(obslist, s, ',');
+			obstacles.boundingCircleRadius = stof(s);
+			getline(obslist, s, ',');
+			obstacles.boundingBoxArea = stof(s);
+			getline(obslist, s, ',');
+			obstacles.heightWidthRatio = stof(s);
+			getline(obslist, s, ',');
+			obstacles.compactness = stof(s);
+			getline(obslist, s, ',');
+			obstacles.CoMX = stoi(s);
+			getline(obslist, s, ',');
+			obstacles.CoMY = stoi(s);
+			getline(obslist, obstacles.label, '\n');
+
+			obsVec.push_back(obstacles);
+	}
+	
+	obslist.close();
+
+	return;
+}
+
+std::string Test::knearest(std::vector<DistFeatures> v) {
+	std::string s = "";
+	int label[6] = {0,0,0,0,0,0};
+	for (int k = 0; k < Kneighbors; k++) {
+		if (v[k].label == "Offset" ) {
+			label[0]++;
+		}
+		if (v[k].label == "Centerpipe" ) {
+			label[1]++;
+		}
+		if (v[k].label == "BranchDown" ) {
+			label[2]++;
+		}
+		if (v[k].label ==  "BranchUp" ) {
+			label[3]++;
+		}
+		if (v[k].label ==  "Obstacles" ) {
+			label[4]++;
+		}
+		if (v[k].label == "Noise" ) {
+			label[5]++;
+		}
+
+	}
+	for (auto label : label)std::cout << label << ' ' << std::endl;
+	int max =0;
+	int idx;
+	for (int i = 0; i < 6; i++)
+	{
+		if (max < label[i]) {
+			max = label[i];
+			idx = i+1;
+		}
+	}
+	std::cout << idx <<std::endl;
+	switch(idx) {
+		case 1: s = "Offset";  break;
+		case 2: s = "Centerpipe"; break;
+		case 3: s = "BranchDown"; break;
+		case 4: s = "BranchUp"; break;
+		case 5: s = "Obstacles"; break;
+		case 6: s = "Noise"; break;
+	}
+	return s;
+}
+

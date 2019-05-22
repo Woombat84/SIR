@@ -12,3 +12,8 @@ struct BlobFeatures {
 	int CoMY;
 	std::string label;
 };
+
+struct DistFeatures {
+	double dist;
+	std::string label;
+};
