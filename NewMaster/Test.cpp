@@ -40,7 +40,8 @@ Test::~Test()
 % Description : This function holds the UI for either training the data or finding the label
 %
 %
-% Parameters : An image, x and y coordinates.
+% Parameters : A binary image,the source image, a vector containing points of the blob,
+%				a string that containes the text file name and a list of Blobfeatures of old blobs
 %
 % Return : nothing.
 %
@@ -84,9 +85,9 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			//Add the compactness of the blob to struct
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
-			Extract.CoMX = 1 / (1.0 + Extract.CoMX);
+			Extract.CoMX =  Extract.CoMX;
 			
-			Extract.CoMY = 1 / (1.0 + Extract.CoMY);
+			Extract.CoMY = Extract.CoMY;
 			//drawing perimeter of what has to be trained
 			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
 			for (int y = 0; y < show.rows; y++) {
@@ -178,17 +179,29 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				else {}
 			}
 			if (j==3) {
+				//
 				std::string faultLabel = DistanceCalc(vector, Extract);
 				std::cout << faultLabel << std::endl;
 				if (faultLabel == "BranchDown" || faultLabel == "BranchUp")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
-				cv::waitKey(1000);
+				
 			}
 			else {}	
 		}
 		cv::destroyAllWindows();
 return;
 }
-
+/*
+% Function : DistanceCalc.
+%
+% Description : This function holds the UI for either training the data or finding the label
+%
+%
+% Parameters : A binary image,the source image, a vector containing points of the blob,
+%				a string that containes the text file name and a list of Blobfeatures of old blobs
+%
+% Return : nothing.
+%
+*/
 std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures feat){
 
 	DistFeatures f;
@@ -202,8 +215,8 @@ std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures fea
 			+ (feat.boundingBoxArea - vector[i].boundingBoxArea) * (feat.boundingBoxArea - vector[i].boundingBoxArea)
 			+ (feat.heightWidthRatio - vector[i].heightWidthRatio) * (feat.heightWidthRatio - vector[i].heightWidthRatio)
 			+ (feat.compactness - vector[i].compactness) * (feat.compactness - vector[i].compactness)
-			+ (feat.CoMX - (1 / (1.0 + vector[i].CoMX))) * (feat.CoMX - (1 / (1.0 + vector[i].CoMX)))
-			+ (feat.CoMY - (1 / (1.0 + vector[i].CoMY))) * (feat.CoMY - (1 / (1.0 + vector[i].CoMY))));
+			+ (feat.CoMX -  vector[i].CoMX) * (feat.CoMX -  vector[i].CoMX)
+			+ (feat.CoMY -  vector[i].CoMY) * (feat.CoMY -  vector[i].CoMY));
 			f.label = vector[i].label;
 		v.push_back(f);
 	}
@@ -214,7 +227,18 @@ std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures fea
 
 	return lable;
 }
-
+/*
+% Function : LoadData.
+%
+% Description : This function holds the UI for either training the data or finding the label
+%
+%
+% Parameters : A binary image,the source image, a vector containing points of the blob,
+%				a string that containes the text file name and a list of Blobfeatures of old blobs
+%
+% Return : nothing.
+%
+*/
 void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures> &obsVec) {
 
 	std::ifstream pipeslist("pipes.txt");
@@ -289,7 +313,18 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 
 	return;
 }
-
+/*
+% Function : knearest.
+%
+% Description : This function holds the UI for either training the data or finding the label
+%
+%
+% Parameters : A binary image,the source image, a vector containing points of the blob,
+%				a string that containes the text file name and a list of Blobfeatures of old blobs
+%
+% Return : nothing.
+%
+*/
 std::string Test::knearest(std::vector<DistFeatures> v) {
 	std::string s = "";
 	int label[6] = {0,0,0,0,0,0};
@@ -335,7 +370,18 @@ std::string Test::knearest(std::vector<DistFeatures> v) {
 	}
 	return s;
 }
-
+/*
+% Function : Clock.
+%
+% Description : This function returns an int based on  
+%
+%
+% Parameters : A binary image,the source image, a vector containing points of the blob,
+%				a string that containes the text file name and a list of Blobfeatures of old blobs
+%
+% Return : nothing.
+%
+*/
 int Test::clock(cv::Mat img, int yB,int xB  ) {
 	int xC = img.cols/2;
 	int yC = img.rows/2;
