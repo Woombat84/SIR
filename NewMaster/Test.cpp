@@ -389,5 +389,22 @@ int Test::clock(cv::Mat img, int yB,int xB  ) {
 	int yR = yC - yB;
 	float tempClock = atan2f(yR,xR);
 	int clock = (((tempClock*180 / PI) + 90) / 15)*24;
-	return clock;
+	int hour = 0;
+
+	//Calculate the time on the clock
+	if (clock > 15 && clock <= 45) { hour = 2; }
+	else if (clock > 45 && clock <= 75) { hour = 1; }
+	else if (clock > 75 && clock <= 105) { hour = 12; }
+	else if (clock > 105 && clock <= 135) { hour = 11; }
+	else if (clock > 135 && clock <= 165) { hour = 10; }
+	else if (clock > 165 && clock <= 195) { hour = 9; }
+	else if (clock > 195 && clock <= 225) { hour = 8; }
+	else if (clock > 225 && clock <= 255) { hour = 7; }
+	else if (clock > 255 && clock <= 285) { hour = 6; }
+	else if (clock > 285 && clock <= 315) { hour = 5; }
+	else if (clock > 315 && clock <= 345) { hour = 4; }
+	else { hour = 3; }
+
+
+	return hour;
 }
