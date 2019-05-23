@@ -12,7 +12,7 @@
 #include "BlobFeatures.h"
 #include "feature.h"
 #include <algorithm>
-#include <map>
+#include <cmath>
 Test::Test()
 {
 	
@@ -155,8 +155,9 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				else {}
 			}
 			if (j==3) {
-				std::string faultLable = DistanceCalc(vector, Extract);
-				std::cout << faultLable << std::endl;
+				std::string faultLabel = DistanceCalc(vector, Extract);
+				std::cout << faultLabel << std::endl;
+				if (faultLabel == "BranchDown" || faultLabel == "BranchUp")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
 				cv::waitKey(1000);
 			}
 			else {}	
@@ -312,3 +313,12 @@ std::string Test::knearest(std::vector<DistFeatures> v) {
 	return s;
 }
 
+int Test::clock(cv::Mat img, int yB,int xB  ) {
+	int xC = img.cols/2;
+	int yC = img.rows/2;
+	int xR = xC - xB;
+	int yR = yC - yB;
+	float tempClock = atan2f(yR,xR);
+	int clock = (((tempClock*180 / PI) + 90) / 15)*24;
+	return clock;
+}

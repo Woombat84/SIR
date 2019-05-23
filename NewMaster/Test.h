@@ -33,6 +33,8 @@ private:
 		
 		std::string knearest(std::vector<DistFeatures> v);
 
+		int clock(cv::Mat img, int y, int x);
+
 	
 
 		int Kneighbors = 11;
