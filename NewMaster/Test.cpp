@@ -1,3 +1,13 @@
+/*
+%
+% This Header Cpp files Traning and testing of images.
+% 
+% Author1: 19gr466
+%
+% Date : Spring 2019
+% Course : Rob4 Computervision
+%
+*/
 #include "Test.h"
 #include <opencv2\core.hpp>
 #include <opencv2\highgui.hpp>
@@ -24,7 +34,17 @@ Test::~Test()
 {
 }
 
-
+/*
+% Function : Training.
+%
+% Description : This function holds the UI for either training the data or finding the label
+%
+%
+% Parameters : An image, x and y coordinates.
+%
+% Return : nothing.
+%
+*/
 void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Point>> Blobs, std::string Classifier, std::vector<BlobFeatures>vector)
 {
 	
@@ -64,6 +84,9 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			//Add the compactness of the blob to struct
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
+			Extract.CoMX = 1 / (1.0 + Extract.CoMX);
+			
+			Extract.CoMY = 1 / (1.0 + Extract.CoMY);
 			//drawing perimeter of what has to be trained
 			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
 			for (int y = 0; y < show.rows; y++) {
@@ -179,8 +202,8 @@ std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures fea
 			+ (feat.boundingBoxArea - vector[i].boundingBoxArea) * (feat.boundingBoxArea - vector[i].boundingBoxArea)
 			+ (feat.heightWidthRatio - vector[i].heightWidthRatio) * (feat.heightWidthRatio - vector[i].heightWidthRatio)
 			+ (feat.compactness - vector[i].compactness) * (feat.compactness - vector[i].compactness)
-			+ (feat.CoMX - vector[i].CoMX) * (feat.CoMX - vector[i].CoMX)
-			+ (feat.CoMY - vector[i].CoMY) * (feat.CoMY - vector[i].CoMY));
+			+ (feat.CoMX - (1 / (1.0 + vector[i].CoMX))) * (feat.CoMX - (1 / (1.0 + vector[i].CoMX)))
+			+ (feat.CoMY - (1 / (1.0 + vector[i].CoMY))) * (feat.CoMY - (1 / (1.0 + vector[i].CoMY))));
 			f.label = vector[i].label;
 		v.push_back(f);
 	}
