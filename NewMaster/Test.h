@@ -36,7 +36,7 @@ private:
 		int clock(cv::Mat img, int y, int x);
 
 	
-
+		// Change Knearst here. 
 		int Kneighbors = 11;
 	
 		
