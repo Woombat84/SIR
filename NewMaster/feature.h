@@ -17,7 +17,9 @@ public:// methodes
 
 	float BlobCircularity(int BlobArea, double BlobPerimeter);	// area of the blob and the perimeter of the blob
 
-	float BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width, int& xAvr, int& yAvr);//blob vector , height and width of image
+	float BoundingCircle(std::vector<cv::Point> BLOB, int Height, int Width, float& xAvr, float& yAvr);//blob vector , height and width of image
+
+
 
 	
 

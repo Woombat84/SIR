@@ -85,9 +85,9 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			//Add the compactness of the blob to struct
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
-			Extract.CoMX =  Extract.CoMX;
+			Extract.CoMX =  (float)Extract.CoMX/srcC.cols;
 			
-			Extract.CoMY = Extract.CoMY;
+			Extract.CoMY = (float)Extract.CoMY/srcC.rows;
 			//drawing perimeter of what has to be trained
 			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
 			for (int y = 0; y < show.rows; y++) {
@@ -123,15 +123,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 						Extract.label = "Obstacles";
 					}
 					if (j == 2) {
-						std::cout << "Up stream(1) Down stream(2)" << std::endl;
-						int Br = 0;
-						std::cin >> Br;
-						if (Br == 1) {
-							Extract.label = "BranchUp";
-						}
-						if (Br == 2) {
-							Extract.label = "BranchDown";
-						}
+						Extract.label = "Branch";
 					}
 					if (j == 3) {
 						Extract.label = "Offset";
@@ -182,7 +174,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				//
 				std::string faultLabel = DistanceCalc(vector, Extract);
 				std::cout << faultLabel << std::endl;
-				if (faultLabel == "BranchDown" || faultLabel == "BranchUp")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
+				if (faultLabel == "Branch")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
 				
 			}
 			else {}	
@@ -266,9 +258,9 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 		getline(pipeslist,s, ',');
 		pipes.compactness = stof(s);
 		getline(pipeslist,s, ',');
-		pipes.CoMX = stoi(s);
+		pipes.CoMX = stof(s);
 		getline(pipeslist,s , ',');
-		pipes.CoMY = stoi(s);
+		pipes.CoMY = stof(s);
 		getline(pipeslist,pipes.label, '\n');
 		pipeVec.push_back(pipes);
 		
@@ -301,9 +293,9 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 			getline(obslist, s, ',');
 			obstacles.compactness = stof(s);
 			getline(obslist, s, ',');
-			obstacles.CoMX = stoi(s);
+			obstacles.CoMX = stof(s);
 			getline(obslist, s, ',');
-			obstacles.CoMY = stoi(s);
+			obstacles.CoMY = stof(s);
 			getline(obslist, obstacles.label, '\n');
 
 			obsVec.push_back(obstacles);
@@ -327,7 +319,7 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 */
 std::string Test::knearest(std::vector<DistFeatures> v) {
 	std::string s = "";
-	int label[6] = {0,0,0,0,0,0};
+	int label[6] = {0,0,0,0,0};
 	for (int k = 0; k < Kneighbors; k++) {
 		if (v[k].label == "Offset" ) {
 			label[0]++;
@@ -335,24 +327,21 @@ std::string Test::knearest(std::vector<DistFeatures> v) {
 		if (v[k].label == "Centerpipe" ) {
 			label[1]++;
 		}
-		if (v[k].label == "BranchDown" ) {
+		if (v[k].label == "Branch" ) {
 			label[2]++;
 		}
-		if (v[k].label ==  "BranchUp" ) {
+		if (v[k].label ==  "Obstacles" ) {
 			label[3]++;
 		}
-		if (v[k].label ==  "Obstacles" ) {
-			label[4]++;
-		}
 		if (v[k].label == "Noise" ) {
-			label[5]++;
+			label[4]++;
 		}
 
 	}
 	for (auto label : label)std::cout << label << ' ' << std::endl;
 	int max =0;
 	int idx;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		if (max < label[i]) {
 			max = label[i];
@@ -363,9 +352,8 @@ std::string Test::knearest(std::vector<DistFeatures> v) {
 	switch(idx) {
 		case 1: s = "Offset";  break;
 		case 2: s = "Centerpipe"; break;
-		case 3: s = "BranchDown"; break;
-		case 4: s = "BranchUp"; break;
-		case 5: s = "Obstacles"; break;
+		case 3: s = "Branch"; break;
+		case 4: s = "Obstacles"; break;
 		case 6: s = "Noise"; break;
 	}
 	return s;
@@ -388,6 +376,6 @@ int Test::clock(cv::Mat img, int yB,int xB  ) {
 	int xR = xC - xB;
 	int yR = yC - yB;
 	float tempClock = atan2f(yR,xR);
-	int clock = (((tempClock*180 / PI) + 90) / 15)*24;
+	int clock = (tempClock*180 / PI);
 	return clock;
 }

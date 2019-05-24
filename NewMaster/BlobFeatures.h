@@ -8,8 +8,8 @@ struct BlobFeatures {
 	float boundingBoxArea;
 	float heightWidthRatio;
 	float compactness;
-	int CoMX;
-	int CoMY;
+	float CoMX;
+	float CoMY;
 	std::string label;
 };
 
