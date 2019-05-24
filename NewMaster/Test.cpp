@@ -376,7 +376,7 @@ int Test::clock(cv::Mat img, int yB,int xB  ) {
 	int xR = xC - xB;
 	int yR = yC - yB;
 	float tempClock = atan2f(yR,xR);
-	int clock = (((tempClock*180 / PI) + 90) / 15)*24;
+	int clock = (tempClock*(180 / PI));
 	int hour = 0;
 
 	//Calculate the time on the clock
