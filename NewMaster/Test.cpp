@@ -174,8 +174,12 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				//
 				std::string faultLabel = DistanceCalc(vector, Extract);
 				std::cout << faultLabel << std::endl;
-				if (faultLabel == "Branch")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
-
+				if (faultLabel == "Branch") {
+					if (clock(srcC, Extract.CoMY, Extract.CoMX)>=9 && clock(srcC, Extract.CoMY, Extract.CoMX) <= 3) {
+						std::cout << " Fualt at " << clock(srcC, Extract.CoMY, Extract.CoMX) << std::endl;
+					}
+					else { std::cout << "No fualt at " << clock(srcC, Extract.CoMY, Extract.CoMX) << std::endl; }
+				}
 			}
 			else {}
 		}
