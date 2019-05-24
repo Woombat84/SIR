@@ -1,7 +1,7 @@
 /*
 %
 % This Header Cpp files Traning and testing of images.
-% 
+%
 % Author1: 19gr466
 %
 % Date : Spring 2019
@@ -12,7 +12,7 @@
 #include <opencv2\core.hpp>
 #include <opencv2\highgui.hpp>
 #include <opencv2\imgproc.hpp>
-#include <iterator> 
+#include <iterator>
 #include <iostream>
 #include <istream>
 #include <fstream>
@@ -25,7 +25,7 @@
 #include <cmath>
 Test::Test()
 {
-	
+
 
 }
 
@@ -48,9 +48,9 @@ Test::~Test()
 */
 void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Point>> Blobs, std::string Classifier, std::vector<BlobFeatures>vector)
 {
-	
+
 		feature Feature;
-		
+
 		std::fstream fs;
 		std::vector<BlobFeatures> Bf;
 		//Feature Extraction
@@ -65,7 +65,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			//Add perimeter to struct
 			std::vector<cv::Point> perimeter;
 			Extract.perimeter = 1 / (1.0 + Feature.perimeterBlob(Blobs[i], srcC.rows, srcC.cols, perimeter));
-			
+
 			//Bounding circle to struct
 			Extract.boundingCircleRadius = 1 / (1.0 + Feature.BoundingCircle(Blobs[i], srcC.rows, srcC.cols, Extract.CoMX, Extract.CoMY));
 
@@ -86,7 +86,7 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			Extract.compactness = 1 / (1.0 + Feature.compactness(BBpoints, Blobs[i].size()));
 
 			Extract.CoMX =  (float)Extract.CoMX/srcC.cols;
-			
+
 			Extract.CoMY = (float)Extract.CoMY/srcC.rows;
 			//drawing perimeter of what has to be trained
 			cv::Mat show = cv::Mat(img.rows, img.cols, CV_8UC1);
@@ -97,12 +97,12 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 			}
 			for (int t = 0; t < perimeter.size(); t++)
 			{
-				
+
 				show.at<uchar>(perimeter[t].y, perimeter[t].x) = 0;
 			}
 			cv::namedWindow(Classifier,CV_WINDOW_AUTOSIZE);
 			cv::imshow(Classifier, show);
-			
+
 			//selecting of what to do whit the data
 			std::cout << "Traning data(1), skip data(2) or Test data(3)" << std::endl;
 			cv::waitKey(100);
@@ -175,9 +175,9 @@ void Test::training( cv::Mat &img, cv::Mat &srcC, std::vector<std::vector<cv::Po
 				std::string faultLabel = DistanceCalc(vector, Extract);
 				std::cout << faultLabel << std::endl;
 				if (faultLabel == "Branch")std::cout<<clock(srcC, Extract.CoMY, Extract.CoMX)<<std::endl;
-				
+
 			}
-			else {}	
+			else {}
 		}
 		cv::destroyAllWindows();
 return;
@@ -199,7 +199,7 @@ std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures fea
 	DistFeatures f;
 	std::vector<DistFeatures> v;
 	for (int i = 0; i < vector.size() ; i++) {
-		
+
 		f.dist=sqrt((feat.area - vector[i].area) * (feat.area - vector[i].area)
 			+ (feat.perimeter - vector[i].perimeter) * (feat.perimeter - vector[i].perimeter)
 			+ (feat.circularity - vector[i].circularity) * (feat.circularity - vector[i].circularity)
@@ -234,7 +234,7 @@ std::string Test::DistanceCalc(std::vector<BlobFeatures>vector, BlobFeatures fea
 void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures> &obsVec) {
 
 	std::ifstream pipeslist("pipes.txt");
-	
+
 		if (!pipeslist)
 		{
 				std::cout << "File can't be opened! " << std::endl;
@@ -263,12 +263,12 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 		pipes.CoMY = stof(s);
 		getline(pipeslist,pipes.label, '\n');
 		pipeVec.push_back(pipes);
-		
+
 	}
-	
+
 	pipeslist.close();
-	
-	
+
+
 	std::ifstream obslist("obstacles.txt");
 	BlobFeatures obstacles;
 		if (!obslist)
@@ -276,7 +276,7 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 				std::cout << "File can't be opened! " << std::endl;
 				system("PAUSE");
 		}
-	
+
 	while (getline(obslist,s ,','))
 	{
 			obstacles.area = stof(s);
@@ -300,7 +300,7 @@ void Test::loadData(std::vector<BlobFeatures> &pipeVec, std::vector<BlobFeatures
 
 			obsVec.push_back(obstacles);
 	}
-	
+
 	obslist.close();
 
 	return;
@@ -361,7 +361,7 @@ std::string Test::knearest(std::vector<DistFeatures> v) {
 /*
 % Function : Clock.
 %
-% Description : This function returns an int based on  
+% Description : This function returns an int based on
 %
 %
 % Parameters : A binary image,the source image, a vector containing points of the blob,
@@ -376,6 +376,23 @@ int Test::clock(cv::Mat img, int yB,int xB  ) {
 	int xR = xC - xB;
 	int yR = yC - yB;
 	float tempClock = atan2f(yR,xR);
-	int clock = (tempClock*180 / PI);
-	return clock;
+	int clock = (((tempClock*180 / PI) + 90) / 15)*24;
+	int hour = 0;
+
+	//Calculate the time on the clock
+	if (clock > 15 && clock <= 45) { hour = 2; }
+	else if (clock > 45 && clock <= 75) { hour = 1; }
+	else if (clock > 75 && clock <= 105) { hour = 12; }
+	else if (clock > 105 && clock <= 135) { hour = 11; }
+	else if (clock > 135 && clock <= 165) { hour = 10; }
+	else if (clock > 165 && clock <= 195) { hour = 9; }
+	else if (clock > 195 && clock <= 225) { hour = 8; }
+	else if (clock > 225 && clock <= 255) { hour = 7; }
+	else if (clock > 255 && clock <= 285) { hour = 6; }
+	else if (clock > 285 && clock <= 315) { hour = 5; }
+	else if (clock > 315 && clock <= 345) { hour = 4; }
+	else { hour = 3; }
+
+
+	return hour;
 }
